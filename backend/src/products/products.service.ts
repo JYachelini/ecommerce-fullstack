@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { Error, Model, ObjectId } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Product } from './interfaces/products.interface';
 import { CreateProductDTO } from './dto/products.dto';
+import { ProductsRepository } from './products.repository';
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) {}
+  constructor(private readonly productRepository: ProductsRepository) {}
 
   getProducts = async (): Promise<Product[]> => {
     try {
-      const products = await this.productModel.find();
+      const products = await this.productRepository.find({});
       return products;
     } catch (error) {
       return error;
@@ -22,7 +21,7 @@ export class ProductsService {
 
   getProduct = async (id: ObjectId): Promise<Product> => {
     try {
-      const product = await this.productModel.findById(id);
+      const product = await this.productRepository.findById(id);
       return product;
     } catch (error) {
       return error;
@@ -33,8 +32,8 @@ export class ProductsService {
     createProductDTO: CreateProductDTO,
   ): Promise<Product> => {
     try {
-      const newProduct = new this.productModel(createProductDTO);
-      return await newProduct.save();
+      const newProduct = this.productRepository.createEntity(createProductDTO);
+      return newProduct;
     } catch (error) {
       return error;
     }
@@ -45,10 +44,9 @@ export class ProductsService {
     createProductDTO: CreateProductDTO,
   ): Promise<Product> => {
     try {
-      const updatedProduct = await this.productModel.findByIdAndUpdate(
+      const updatedProduct = this.productRepository.updateObject(
         id,
         createProductDTO,
-        { new: true },
       );
       return updatedProduct;
     } catch (error) {
@@ -56,9 +54,9 @@ export class ProductsService {
     }
   };
 
-  deleteProduct = async (id: ObjectId): Promise<Product> => {
+  deleteProduct = async (id: ObjectId): Promise<boolean> => {
     try {
-      const deletedProduct = await this.productModel.findByIdAndDelete(id);
+      const deletedProduct = this.productRepository.deleteObject(id);
       return deletedProduct;
     } catch (error) {
       return error;

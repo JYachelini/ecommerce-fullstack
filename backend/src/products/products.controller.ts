@@ -10,9 +10,14 @@ import {
   Param,
   NotFoundException,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ObjectId } from 'mongoose';
+import { hasRoles } from '../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { UserRole } from '../users/interfaces/user.interface';
 import { CreateProductDTO } from './dto/products.dto';
 import { ProductsService } from './products.service';
 
@@ -33,6 +38,8 @@ export class ProductsController {
     else return res.status(HttpStatus.OK).json({ product });
   }
 
+  @hasRoles(UserRole.USER && UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/') // Example: localhost:8080/products/     <- Need body
   async createProduct(
     @Res() res: Response,
@@ -47,7 +54,9 @@ export class ProductsController {
       });
   }
 
-  @Put('/') // Example: localhost:8080/product?id=62f574b08880dcedb3e7927f    <- Need Query & Body
+  @hasRoles(UserRole.USER && UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put('/') // Example: localhost:8080/products?id=62f574b08880dcedb3e7927f    <- Need Query & Body
   async updateProduct(
     @Res() res: Response,
     @Body() createProductDTO: CreateProductDTO,
@@ -65,7 +74,9 @@ export class ProductsController {
       });
   }
 
-  @Delete('/') // Example: localhost:8080/product?id=62f574b08880dcedb3e7927f    <- Need Query
+  @hasRoles(UserRole.USER && UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Delete('/') // Example: localhost:8080/products?id=62f574b08880dcedb3e7927f    <- Need Query
   async deleteProduct(@Res() res: Response, @Query('id') id: ObjectId) {
     const productDeleted = await this.productService.deleteProduct(id);
     if (!productDeleted) throw new NotFoundException('Product Does not exists');
