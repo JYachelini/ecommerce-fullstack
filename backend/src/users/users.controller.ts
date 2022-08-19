@@ -10,18 +10,16 @@ import {
   Response,
   UseGuards,
 } from '@nestjs/common';
-import { hasRoles } from '../auth/decorator/roles.decorator';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 import { CreateUserDTO } from './dto/user.dto';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { User, UserRole } from './interfaces/user.interface';
+import { User } from './interfaces/user.interface';
 import { ObjectId } from 'mongoose';
 import { UserIsUserGuard } from 'src/auth/guards/UserIsUser.guard';
 
-@Controller('auth')
+@Controller('')
 export class UsersController {
   constructor(
     private usersService: UsersService,
@@ -35,8 +33,12 @@ export class UsersController {
     res.json(access_token);
   }
 
-  @hasRoles(UserRole.USER && UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('register')
+  async register(@Body() user: CreateUserDTO, @Res() res) {
+    const registerUser = await this.usersService.register(user);
+    res.json(registerUser);
+  }
+
   @Get('user')
   user(@Request() req, @Response() res) {
     if (req.user) {
@@ -44,12 +46,6 @@ export class UsersController {
     } else {
       res.json({ error: 'No user found' });
     }
-  }
-
-  @Post('register')
-  async register(@Body() user: CreateUserDTO, @Res() res) {
-    const registerUser = await this.usersService.register(user);
-    res.json(registerUser);
   }
 
   @UseGuards(JwtAuthGuard, UserIsUserGuard)

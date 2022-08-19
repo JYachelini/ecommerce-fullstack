@@ -38,7 +38,7 @@ export class ProductsController {
     else return res.status(HttpStatus.OK).json({ product });
   }
 
-  @hasRoles(UserRole.USER && UserRole.ADMIN)
+  @hasRoles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/') // Example: localhost:8080/products/     <- Need body
   async createProduct(
@@ -54,7 +54,7 @@ export class ProductsController {
       });
   }
 
-  @hasRoles(UserRole.USER && UserRole.ADMIN)
+  @hasRoles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Put('/') // Example: localhost:8080/products?id=62f574b08880dcedb3e7927f    <- Need Query & Body
   async updateProduct(
@@ -74,7 +74,7 @@ export class ProductsController {
       });
   }
 
-  @hasRoles(UserRole.USER && UserRole.ADMIN)
+  @hasRoles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('/') // Example: localhost:8080/products?id=62f574b08880dcedb3e7927f    <- Need Query
   async deleteProduct(@Res() res: Response, @Query('id') id: ObjectId) {

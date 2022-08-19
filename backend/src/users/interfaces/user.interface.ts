@@ -14,4 +14,5 @@ export interface User extends Document {
   readonly phone: string;
   readonly address: string;
   readonly email: string;
+  readonly error?: string;
 }
