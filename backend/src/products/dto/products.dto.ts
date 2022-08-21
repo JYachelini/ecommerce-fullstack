@@ -18,8 +18,55 @@ export class CreateProductDTO {
   @IsString()
   imageURL: string;
 
+  @IsString()
+  @MinLength(3)
+  category: string;
+
+  @IsString()
+  @MinLength(3)
+  subcategory: string;
+
   @IsNumber()
   @Min(0)
+  price: number;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  stock: number;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class UpdateProductDTO {
+  @IsString()
+  @MinLength(3)
+  @IsOptional()
+  name: string;
+
+  @IsString()
+  @MinLength(3)
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsOptional()
+  imageURL: string;
+
+  @IsString()
+  @MinLength(3)
+  @IsOptional()
+  category: string;
+
+  @IsString()
+  @MinLength(3)
+  @IsOptional()
+  subcategory: string;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
   price: number;
 
   @IsNumber()

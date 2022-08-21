@@ -1,11 +1,29 @@
-import { Document, FilterQuery, Model, UpdateQuery } from 'mongoose';
+import { Document, FilterQuery, Model, SortOrder, UpdateQuery } from 'mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
 
-  find = async (Filter: FilterQuery<T>): Promise<T[] | null> => {
+  find = async (
+    Filter: FilterQuery<T>,
+    Sort,
+    pages,
+    limitPages,
+  ): Promise<T[] | null> => {
     try {
-      return await this.entityModel.find(Filter).exec();
+      return await this.entityModel
+        .find(Filter)
+        .sort(Sort)
+        .skip((pages - 1) * limitPages)
+        .limit(limitPages)
+        .exec();
+    } catch (error) {
+      return error;
+    }
+  };
+
+  findAndCount = async (Filter: FilterQuery<T>) => {
+    try {
+      return await this.entityModel.countDocuments(Filter).exec();
     } catch (error) {
       return error;
     }
@@ -47,6 +65,16 @@ export abstract class EntityRepository<T extends Document> {
     try {
       const entity = new this.entityModel(createEntityData);
       return await entity.save();
+    } catch (error) {
+      return error;
+    }
+  };
+
+  createMany = async (createManyData: unknown): Promise<any> => {
+    try {
+      const test = await this.entityModel.insertMany(createManyData);
+      console.log(test);
+      return test;
     } catch (error) {
       return error;
     }

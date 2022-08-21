@@ -21,6 +21,9 @@ export class UsersService {
   };
 
   updateUser = async (id: ObjectId, user: User) => {
+    delete user.roles;
+    delete user._id;
+    delete user.email;
     return await this.userRepository.updateObject(id, user);
   };
 }

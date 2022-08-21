@@ -9,10 +9,10 @@ export interface User extends Document {
   readonly name: string;
   readonly username: string;
   readonly password: string;
-  readonly roles: UserRole;
+  roles: UserRole;
   readonly avatar: string;
   readonly phone: string;
   readonly address: string;
-  readonly email: string;
+  email: string;
   readonly error?: string;
 }

@@ -1,25 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import { Model, ObjectId } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { FilterQuery, ObjectId } from 'mongoose';
 
-import { Product } from './interfaces/products.interface';
+import { ProductInterface } from './interfaces/products.interface';
 import { CreateProductDTO } from './dto/products.dto';
 import { ProductsRepository } from './products.repository';
+import { async } from 'rxjs';
 
 @Injectable()
 export class ProductsService {
   constructor(private readonly productRepository: ProductsRepository) {}
 
-  getProducts = async (): Promise<Product[]> => {
+  getProducts = async (
+    filter,
+    sort,
+    pages,
+    limitPages,
+  ): Promise<ProductInterface[]> => {
     try {
-      const products = await this.productRepository.find({});
+      const products = await this.productRepository.find(
+        filter,
+        sort,
+        pages,
+        limitPages,
+      );
       return products;
     } catch (error) {
       return error;
     }
   };
 
-  getProduct = async (id: ObjectId): Promise<Product> => {
+  getCategories = async (filter) => {
+    try {
+      const categories = await this.productRepository.getCategories(filter);
+      return categories;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getCountProducts = async (filter) => {
+    try {
+      const count = await this.productRepository.findAndCount(filter);
+      return count;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getProduct = async (id: ObjectId): Promise<ProductInterface> => {
     try {
       const product = await this.productRepository.findById(id);
       return product;
@@ -30,7 +58,7 @@ export class ProductsService {
 
   createProduct = async (
     createProductDTO: CreateProductDTO,
-  ): Promise<Product> => {
+  ): Promise<ProductInterface> => {
     try {
       const newProduct = this.productRepository.createEntity(createProductDTO);
       return newProduct;
@@ -42,7 +70,7 @@ export class ProductsService {
   updateProduct = async (
     id: ObjectId,
     createProductDTO: CreateProductDTO,
-  ): Promise<Product> => {
+  ): Promise<ProductInterface> => {
     try {
       const updatedProduct = this.productRepository.updateObject(
         id,

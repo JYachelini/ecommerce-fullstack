@@ -5,10 +5,11 @@ import {
   Param,
   Post,
   Put,
-  Request,
   Res,
-  Response,
+  Req,
   UseGuards,
+  UnauthorizedException,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
@@ -28,30 +29,42 @@ export class UsersController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req, @Response() res) {
+  async login(@Req() req, @Res() res) {
     const access_token = await this.authService.login(req.user);
-    res.json(access_token);
+    if (access_token.error) res.status(HttpStatus.NOT_FOUND).json(access_token);
+    else res.status(HttpStatus.OK).json(access_token);
   }
 
   @Post('register')
   async register(@Body() user: CreateUserDTO, @Res() res) {
     const registerUser = await this.usersService.register(user);
-    res.json(registerUser);
+    res.status(HttpStatus.OK).json(registerUser);
   }
 
   @Get('user')
-  user(@Request() req, @Response() res) {
+  user(@Req() req, @Res() res) {
     if (req.user) {
-      res.json(req.user);
+      res.status(HttpStatus.OK).json(req.user);
     } else {
-      res.json({ error: 'No user found' });
+      res.status(HttpStatus.NOT_FOUND).json({ error: 'No user found' });
     }
   }
 
   @UseGuards(JwtAuthGuard, UserIsUserGuard)
   @Put('user/:id')
   async updateUser(@Body() user: User, @Param('id') id: ObjectId, @Res() res) {
+    if (user.roles)
+      throw new UnauthorizedException('You cannot update your own role.');
+
+    if (user.email)
+      throw new UnauthorizedException('You cannot update your own email.');
+
+    if (user._id)
+      throw new UnauthorizedException('You cannot update your own id.');
+
     const userUpdated = await this.usersService.updateUser(id, user);
-    res.json({ message: 'User Updated Succesfully.', userUpdated });
+    res
+      .status(HttpStatus.OK)
+      .json({ message: 'User Updated Succesfully.', userUpdated });
   }
 }

@@ -18,7 +18,7 @@ import { hasRoles } from '../auth/decorator/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UserRole } from '../users/interfaces/user.interface';
-import { CreateProductDTO } from './dto/products.dto';
+import { CreateProductDTO, UpdateProductDTO } from './dto/products.dto';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -26,9 +26,57 @@ export class ProductsController {
   constructor(private productService: ProductsService) {}
 
   @Get('/') // Example: localhost:8080/products
-  async getProducts(@Res() res: Response) {
-    const products = await this.productService.getProducts();
-    return res.status(HttpStatus.OK).json({ products });
+  async getProducts(
+    @Res() res: Response,
+    @Query('name') name: string,
+    @Query('category') category: string,
+    @Query('sort') sort: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    let filters = {};
+    let sorting = {};
+
+    if (name && category) {
+      filters = {
+        $and: [
+          { name: new RegExp(name.toString(), 'i') },
+          { category: new RegExp(category.toString(), 'i') },
+        ],
+      };
+    } else if (name) {
+      filters = { name };
+    } else if (category) {
+      filters = { category };
+    }
+
+    if (sort) {
+      sorting = { price: sort };
+    }
+    const actual_page: number = Number(page) || 1;
+    const limits = Number(limit) || 10;
+
+    const products = await this.productService.getProducts(
+      filters,
+      sorting,
+      actual_page,
+      limits,
+    );
+
+    const total_items = await this.productService.getCountProducts(filters);
+
+    return res.status(HttpStatus.OK).json({
+      products,
+      total_items,
+      actual_page,
+      last_page: Math.ceil(total_items / limits),
+    });
+  }
+
+  @Get('/categories') // Example: localhost:8080/products/categories
+  async getCategories(@Res() res: Response) {
+    const categories = await this.productService.getCategories({});
+    res.json(categories);
   }
 
   @Get('/:id') // Example: localhost:8080/products/62f574b08880dcedb3e7927f     <- Need id from Param
@@ -59,12 +107,12 @@ export class ProductsController {
   @Put('/') // Example: localhost:8080/products?id=62f574b08880dcedb3e7927f    <- Need Query & Body
   async updateProduct(
     @Res() res: Response,
-    @Body() createProductDTO: CreateProductDTO,
+    @Body() updateProductDTO: UpdateProductDTO,
     @Query('id') id: ObjectId,
   ) {
     const productUpdated = await this.productService.updateProduct(
       id,
-      createProductDTO,
+      updateProductDTO,
     );
     if (!productUpdated) throw new NotFoundException('Product Does not exists');
     else
