@@ -25,11 +25,15 @@ import { ProductsService } from './products.service';
 export class ProductsController {
   constructor(private productService: ProductsService) {}
 
-  @Get('/') // Example: localhost:8080/products
+  // Example: localhost:8080/products
+  // Example w/params: localhost:8080/products?category=Clothing
+  // Example w/params: localhost:8080/products?page=2&limit=5
+  @Get('/')
   async getProducts(
     @Res() res: Response,
     @Query('name') name: string,
     @Query('category') category: string,
+    @Query('subcategory') subcategory: string,
     @Query('sort') sort: string,
     @Query('page') page: number,
     @Query('limit') limit: number,
@@ -37,11 +41,19 @@ export class ProductsController {
     let filters = {};
     let sorting = {};
 
-    if (name && category) {
+    // if (name && category) {
+    //   filters = {
+    //     $and: [
+    //       { name: new RegExp(name.toString(), 'i') },
+    //       { category: new RegExp(category.toString(), 'i') },
+    //     ],
+    //   };
+    // }
+    if (subcategory && category) {
       filters = {
         $and: [
-          { name: new RegExp(name.toString(), 'i') },
           { category: new RegExp(category.toString(), 'i') },
+          { subcategory: new RegExp(subcategory.toString(), 'i') },
         ],
       };
     } else if (name) {

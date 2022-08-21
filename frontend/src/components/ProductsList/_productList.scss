@@ -1,6 +1,9 @@
-.products_list {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 5rem;
-  gap: 2.5rem;
+main {
+  .products_list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 5rem;
+    margin-top: 0;
+    gap: 2.5rem;
+  }
 }

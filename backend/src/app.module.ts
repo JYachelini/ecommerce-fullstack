@@ -9,7 +9,6 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import config from './config/config';
 import { validate } from './config/env.validation';
-
 @Module({
   imports: [
     ConfigModule.forRoot({

@@ -1,6 +1,9 @@
-import { ProductInterface } from './products.interface';
+import { categories, ProductInterface } from './products.interface';
+import { UserInterface } from './user.interface';
 
 export interface context {
+  user: UserInterface | null;
+
   products: ProductInterface[];
 
   actual_page: number;
@@ -17,24 +20,4 @@ export interface context {
 
   subcategoriesToView: string[];
   setSubcategoriesToView: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-export interface axiosResponseProducts {
-  data: {
-    products: ProductInterface[];
-    actual_page: number;
-    total_items: number;
-    last_page: number;
-  };
-}
-
-export interface axiosResponseCategories {
-  data: {
-    categories: categories[];
-  };
-}
-
-export interface categories {
-  category: string;
-  subcategories: string[];
 }

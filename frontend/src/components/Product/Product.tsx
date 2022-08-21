@@ -1,7 +1,15 @@
 import React from 'react';
 import { ProductInterface } from '../Interfaces/products.interface';
 
-function Product({ id, imageURL, name, price, description }: ProductInterface) {
+function Product({
+  id,
+  imageURL,
+  name,
+  price,
+  description,
+  category,
+  subcategory,
+}: ProductInterface) {
   const user = {
     name: 'yache',
     isAdmin: false,
