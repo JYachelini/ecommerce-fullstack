@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
+import { async } from 'rxjs';
 import { CreateUserDTO } from './dto/user.dto';
 import { User } from './interfaces/user.interface';
 import { UsersRepository } from './users.repository';
@@ -7,6 +8,14 @@ import { UsersRepository } from './users.repository';
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UsersRepository) {}
+
+  getUsers = async (filter, sort, pages, limitPages) => {
+    return await this.userRepository.find(filter, sort, pages, limitPages);
+  };
+
+  countUsers = async (filter) => {
+    return await this.userRepository.findAndCount(filter);
+  };
 
   findUser = async (username: string) => {
     return await this.userRepository.findOne({ username });

@@ -1,9 +1,13 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Context } from '../Context/Context';
 import { ProductInterface } from '../Interfaces/products.interface';
 import Product from '../Product/Product';
 
-function ProductList() {
+interface PropsProductList {
+  canEdit?: boolean;
+}
+
+function ProductList({ canEdit = false }: PropsProductList) {
   const {
     products,
     actual_page,
@@ -29,28 +33,24 @@ function ProductList() {
       {products ? (
         <>
           <div className="products_list">
-            {products.map((product: ProductInterface, index: number) => {
+            {products.map((product: ProductInterface) => {
               return (
-                <Product
-                  key={index}
-                  description={product.description}
-                  id={product.id}
-                  imageURL={product.imageURL}
-                  name={product.name}
-                  price={product.price}
-                  category={product.category}
-                  subcategory={product.subcategory}
-                />
+                <Product {...product} key={product._id} canEdit={canEdit} />
               );
             })}
           </div>
           <div className="products_pages">
-            <button className="products_list-btn_prev" onClick={prevPage}>
-              Prev
-            </button>
-            <button className="products_lsit-btn_next" onClick={nextPage}>
-              Next
-            </button>
+            <div className="product_pages-btn_wrapper">
+              <button className="product_pages-btn prev" onClick={prevPage}>
+                Prev
+              </button>
+              <button
+                className="product_pages-btn next_page"
+                onClick={nextPage}
+              >
+                Next
+              </button>
+            </div>
             <span>
               Page {actual_page} of {last_page}
             </span>

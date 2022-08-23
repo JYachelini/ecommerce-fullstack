@@ -2,7 +2,7 @@ import { categories, ProductInterface } from './products.interface';
 import { UserInterface } from './user.interface';
 
 export interface context {
-  user: UserInterface | null;
+  // user: UserInterface | null;
 
   products: ProductInterface[];
 
@@ -20,4 +20,7 @@ export interface context {
 
   subcategoriesToView: string[];
   setSubcategoriesToView: React.Dispatch<React.SetStateAction<string[]>>;
+
+  access_token: string | any;
+  setAccessToken: string | any;
 }

@@ -5,6 +5,7 @@ import {
   Length,
   IsOptional,
   IsEnum,
+  Matches,
 } from 'class-validator';
 
 import { UserRole } from '../interfaces/user.interface';
@@ -27,16 +28,18 @@ export class CreateUserDTO {
 
   @IsString()
   @Length(6, 32)
+  @Matches(
+    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,32}/,
+  )
   password: string;
 
   @IsString()
-  @MinLength(3)
-  @IsOptional()
-  avatar: string;
+  @Length(6, 32)
+  confirmPassword: string;
 
   @IsString()
   @MinLength(3)
-  @IsOptional()
+  @Matches(/^\+[1-9]\d{6,14}$/)
   phone: string;
 
   @IsString()

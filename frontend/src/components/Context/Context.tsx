@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { context } from '../Interfaces/context.interface';
 import { categories, ProductInterface } from '../Interfaces/products.interface';
 import { useQuery } from '../CustomHooks/queryParams';
@@ -7,26 +7,12 @@ import {
   axiosResponseCategories,
   axiosResponseProducts,
 } from '../Interfaces/axiosResponse.interface';
-import { UserInterface } from '../Interfaces/user.interface';
+import { useLocalStorage } from '../CustomHooks/useLocalStorage';
 
 const INITIAL_STATE_PRODUCTS: ProductInterface[] = [];
 
 export const Context = createContext<context>({} as context);
 export default function ContextProvider({ children }: any) {
-  // User
-  const [user, setUser] = useState<UserInterface | null>(null);
-
-  useEffect(() => {
-    axios
-      .get('http://localhost:8080/user', { withCredentials: true })
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch(() => {
-        console.clear();
-      });
-  }, []);
-
   // Products
   const [products, setProducts] = useState<ProductInterface[]>(
     INITIAL_STATE_PRODUCTS,
@@ -60,13 +46,7 @@ export default function ContextProvider({ children }: any) {
         const filteredProducts: ProductInterface[] = [];
         data.products.forEach((product: ProductInterface) => {
           const productInfo: ProductInterface = {
-            name: product.name,
-            price: product.price,
-            description: product.description,
-            id: product.id,
-            imageURL: product.imageURL,
-            category: product.category,
-            subcategory: product.subcategory,
+            ...product,
           };
           filteredProducts.push(productInfo);
         });
@@ -94,11 +74,14 @@ export default function ContextProvider({ children }: any) {
   }, []);
 
   const [subcategoriesToView, setSubcategoriesToView] = useState<string[]>([]);
+  // Token
+
+  const [access_token, setAccessToken] = useLocalStorage('access_token', '');
 
   return (
     <Context.Provider
       value={{
-        user,
+        // user,
         products,
         actual_page,
         setActualPage,
@@ -109,6 +92,8 @@ export default function ContextProvider({ children }: any) {
         categories,
         subcategoriesToView,
         setSubcategoriesToView,
+        access_token,
+        setAccessToken,
       }}
     >
       {children}

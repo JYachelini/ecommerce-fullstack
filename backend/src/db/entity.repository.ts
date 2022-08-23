@@ -1,4 +1,4 @@
-import { Document, FilterQuery, Model, SortOrder, UpdateQuery } from 'mongoose';
+import { Document, FilterQuery, Model, UpdateQuery } from 'mongoose';
 
 export abstract class EntityRepository<T extends Document> {
   constructor(protected readonly entityModel: Model<T>) {}
@@ -6,12 +6,12 @@ export abstract class EntityRepository<T extends Document> {
   find = async (
     Filter: FilterQuery<T>,
     Sort,
-    pages,
-    limitPages,
+    pages: number,
+    limitPages: number,
   ): Promise<T[] | null> => {
     try {
       return await this.entityModel
-        .find(Filter)
+        .find(Filter, { __v: 0, password: 0 })
         .sort(Sort)
         .skip((pages - 1) * limitPages)
         .limit(limitPages)

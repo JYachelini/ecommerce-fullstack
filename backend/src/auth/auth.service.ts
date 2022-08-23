@@ -30,11 +30,13 @@ export class AuthService {
     if (user.error) return { error: user.error };
 
     const payload = {
+      _id: user._id,
+      name: user.name,
       username: user.username,
-      id: user._id,
-      avatar: user.avatar,
+      email: user.email,
       phone: user.phone,
-      addres: user.address,
+      role: user.roles,
+      address: user.address,
     };
 
     return {

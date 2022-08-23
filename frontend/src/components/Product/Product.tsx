@@ -2,13 +2,14 @@ import React from 'react';
 import { ProductInterface } from '../Interfaces/products.interface';
 
 function Product({
-  id,
+  _id,
   imageURL,
   name,
   price,
   description,
   category,
   subcategory,
+  canEdit,
 }: ProductInterface) {
   const user = {
     name: 'yache',
@@ -16,7 +17,7 @@ function Product({
   };
   return (
     <>
-      <article id={id} className="product">
+      <article id={_id} className="product">
         <div className="product_image">
           <img src={imageURL} alt={name} />
         </div>
@@ -27,12 +28,8 @@ function Product({
         </div>
         <div className="product_add">
           <button>Agregar</button>
+          {canEdit ? <button>Editar</button> : null}
         </div>
-        {user.isAdmin ? (
-          <div className="product_edit">
-            <button>Editar</button>
-          </div>
-        ) : null}
       </article>
     </>
   );

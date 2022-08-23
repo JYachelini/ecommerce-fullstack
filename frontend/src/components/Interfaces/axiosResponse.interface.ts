@@ -1,4 +1,5 @@
 import { categories, ProductInterface } from './products.interface';
+import { UserInterface } from './user.interface';
 
 export interface axiosResponseProducts {
   data: {
@@ -13,4 +14,43 @@ export interface axiosResponseCategories {
   data: {
     categories: categories[];
   };
+}
+
+export interface axiosResponseRegisterError {
+  response: {
+    data: {
+      error: string;
+    };
+  };
+}
+
+export interface axiosResponseRegisterSuccess {
+  data: {
+    _id: string;
+  };
+}
+
+export interface axiosResponseLoginError {
+  response: {
+    data: {
+      error: string;
+    };
+  };
+}
+
+export interface axiosResponseLoginSuccess {
+  data: {
+    access_token: string;
+  };
+}
+
+export interface axiosResponseAdminUsersSuccess {
+  data: axiosDataResponseAdminUsersSuccess;
+}
+
+export interface axiosDataResponseAdminUsersSuccess {
+  actual_page: number;
+  last_page: number;
+  total_items: number;
+  users: UserInterface[];
 }

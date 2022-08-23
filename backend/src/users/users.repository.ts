@@ -14,7 +14,11 @@ export class UsersRepository extends EntityRepository<UserDocument> {
   }
 
   register = async (user: CreateUserDTO) => {
-    const { username, password, email, address, avatar, name, phone } = user;
+    const { username, confirmPassword, password, email, address, name, phone } =
+      user;
+
+    if (confirmPassword !== password)
+      return { error: "Password's don't match" };
 
     const emailFound = await this.findOne({ email })
       .catch((err) => {
@@ -33,21 +37,23 @@ export class UsersRepository extends EntityRepository<UserDocument> {
       });
 
     if (emailFound) {
-      return { error: 'Mail already exist.' };
+      return { error: 'Email already exist.' };
     } else {
       if (userFound) {
         return { error: 'User already exist.' };
       } else {
         const hashedPassword = await bcrypt.hash(password, 10);
-        return await this.createEntity({
+        const newUserRegistered = await this.createEntity({
           name,
           username,
           password: hashedPassword,
           email,
           phone,
-          avatar,
           address,
         });
+        return {
+          _id: newUserRegistered._id,
+        };
       }
     }
   };

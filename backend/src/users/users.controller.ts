@@ -10,15 +10,18 @@ import {
   UseGuards,
   UnauthorizedException,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 import { CreateUserDTO } from './dto/user.dto';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { User } from './interfaces/user.interface';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { User, UserRole } from './interfaces/user.interface';
 import { ObjectId } from 'mongoose';
-import { UserIsUserGuard } from 'src/auth/guards/UserIsUser.guard';
+import { UserIsUserGuard } from '../auth/guards/UserIsUser.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { hasRoles } from '../auth/decorator/roles.decorator';
 
 @Controller('')
 export class UsersController {
@@ -38,7 +41,11 @@ export class UsersController {
   @Post('register')
   async register(@Body() user: CreateUserDTO, @Res() res) {
     const registerUser = await this.usersService.register(user);
-    res.status(HttpStatus.OK).json(registerUser);
+    if (registerUser._id) {
+      res.status(HttpStatus.OK).json(registerUser);
+    } else if (registerUser.error) {
+      res.status(HttpStatus.NOT_IMPLEMENTED).json(registerUser);
+    }
   }
 
   @Get('user')
@@ -47,6 +54,39 @@ export class UsersController {
       res.status(HttpStatus.OK).json(req.user);
     } else {
       res.status(HttpStatus.NOT_FOUND).json({ error: 'No user found' });
+    }
+  }
+
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('users')
+  async users(
+    @Res() res,
+    @Query('sort') sort: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    let filters = {};
+    let sorting = {};
+    const actual_page: number = Number(page) || 1;
+    const limits = Number(limit) || 10;
+    const users = await this.usersService.getUsers(
+      filters,
+      sorting,
+      actual_page,
+      limits,
+    );
+    const total_items = await this.usersService.countUsers(filters);
+
+    if (users) {
+      res.status(HttpStatus.OK).json({
+        users,
+        total_items,
+        actual_page,
+        last_page: Math.ceil(total_items / limits),
+      });
+    } else {
+      res.status(HttpStatus.CONFLICT).json({ users });
     }
   }
 
