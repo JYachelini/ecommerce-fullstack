@@ -7,7 +7,7 @@ import FetchFunctions from './components/fetchs/FetchFunctions';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/ecommerce-fullstack">
       <ContextProvider>
         <FetchFunctions>
           <App />
