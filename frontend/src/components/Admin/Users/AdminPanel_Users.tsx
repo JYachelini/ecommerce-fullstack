@@ -59,9 +59,24 @@ function AdminPanel_Users() {
         <Loading />
       ) : (
         <div className="admin_dashboard-users">
-          {users?.map((user) => {
-            return <UserList key={user._id} user={user} />;
-          })}
+          <div className="user">
+            <table className="user_table">
+              <thead className="user_table-header">
+                <tr>
+                  <th>Usuario</th>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>Telefono</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody className="user_table-body">
+                {users?.map((user) => {
+                  return <UserList key={user._id} user={user} />;
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
       <div className="buttons_wrapper">

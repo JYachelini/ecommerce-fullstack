@@ -1,0 +1,131 @@
+.creating_order {
+  height: 70vh;
+  margin: 0 20vw;
+  border: 1px solid red;
+  display: flex;
+  .cart_view {
+    margin: 0;
+    width: 40%;
+    padding: 0;
+    height: 100%;
+    .cart_items {
+      padding: 0;
+      a {
+        article {
+          height: auto;
+          display: flex;
+          flex-direction: column;
+          .cart_items-info {
+            text-align: center;
+            div {
+              h3 {
+                font-weight: 400;
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+    }
+    .cart_info {
+      padding: 0;
+      justify-content: center;
+    }
+  }
+  .order_user-info {
+    width: 100%;
+    padding: 1rem;
+    h3 {
+      height: 5%;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      height: 95%;
+      justify-content: space-between;
+      span,
+      label,
+      button {
+        margin: 0 auto;
+      }
+      span,
+      button {
+        padding: 1rem 1rem;
+        border: 1px solid black;
+        width: 15vw;
+        input {
+          border: none;
+          width: 100%;
+        }
+      }
+      label input {
+        margin: 0;
+        padding: 0;
+        width: auto;
+      }
+    }
+    form {
+      .register_form-input_wrapper {
+        border: 0.125rem solid gray;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 15rem;
+        input {
+          padding: 1rem;
+          font-size: 1rem;
+          border: none;
+          width: 100%;
+          &:focus-visible {
+            outline: none;
+          }
+        }
+        input:invalid[data-focused='true'] ~ .error {
+          display: block;
+        }
+
+        .error {
+          position: relative;
+          display: none;
+          svg {
+            width: 25px;
+            height: 25px;
+            fill: red;
+            position: relative;
+            z-index: 5;
+          }
+          span {
+            position: absolute;
+            top: -50%;
+            right: -8%;
+            height: 100%;
+            background-color: rgba(220, 100, 100);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.12rem;
+            font-size: 0.8rem;
+            width: 14rem;
+            padding: 0.9rem 0.7rem;
+          }
+        }
+        .PhoneInput {
+          flex-direction: row-reverse;
+          input {
+            border: none;
+            &:focus-visible {
+              outline: none;
+            }
+          }
+        }
+        .errorPhone {
+          .error {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

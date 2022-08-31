@@ -1,0 +1,20 @@
+main {
+  padding-top: 10rem;
+  display: flex;
+  flex-direction: column;
+  .products_pages {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    .product_pages-btn_wrapper {
+      display: flex;
+      gap: 2rem;
+      .product_pages-btn {
+      }
+    }
+    * {
+      margin: auto;
+    }
+  }
+}

@@ -20,6 +20,7 @@ function ProductList({ hasPermissions = false }: PropsProductList) {
     loading,
     setLoading,
     setProductId,
+    setProductName,
   } = useContext(Context);
 
   const firstPage = () => {
@@ -47,6 +48,11 @@ function ProductList({ hasPermissions = false }: PropsProductList) {
   const handleProductId = (e: any) => {
     const { value } = e.target;
     setProductId(value);
+  };
+
+  const handleProductName = (e: any) => {
+    const { value } = e.target;
+    setProductName(value);
   };
 
   return (
@@ -98,6 +104,11 @@ function ProductList({ hasPermissions = false }: PropsProductList) {
                 type="text"
                 placeholder="Buscar por ID de producto"
                 onChange={handleProductId}
+              />
+              <input
+                type="text"
+                placeholder="Buscar por nombre de producto"
+                onChange={handleProductName}
               />
             </>
           ) : null}

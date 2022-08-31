@@ -3,7 +3,5 @@ dist
 *.txt
 .env
 backend/src/products/seeder.ts
-*.scss
 
-**/.sass-cache/*
 frontend/src/css/**.css.map

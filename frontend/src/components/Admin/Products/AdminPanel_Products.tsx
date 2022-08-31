@@ -4,7 +4,7 @@ import ProductList from '../../ProductsList/ProductList';
 function AdminPanel_Products() {
   const { setLimit } = useContext(Context);
   useEffect(() => {
-    setLimit(5);
+    setLimit(10);
   }, []);
 
   return (

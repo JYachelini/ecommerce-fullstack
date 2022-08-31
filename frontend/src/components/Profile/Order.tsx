@@ -4,7 +4,7 @@ import { CartInterfaceDB } from '../Interfaces/cart.interface';
 
 interface PropsOrder {
   order: CartInterfaceDB;
-  admin: boolean;
+  admin?: boolean;
 }
 
 function Order({ order, admin = false }: PropsOrder) {

@@ -1,11 +1,6 @@
 import { CartInterface } from './cart.interface';
 import { categories, ProductInterface } from './products.interface';
-import { DecodedToken } from './token.interface';
-import {
-  LoginValues,
-  UserInterface,
-  UserInterfaceRegister,
-} from './user.interface';
+import { UserDecoded } from './token.interface';
 
 export interface context {
   loading: boolean;
@@ -20,6 +15,8 @@ export interface context {
 
   productId: string | undefined;
   setProductId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  productName: string | undefined;
+  setProductName: React.Dispatch<React.SetStateAction<string | undefined>>;
 
   actual_page: number;
   setActualPage: React.Dispatch<React.SetStateAction<number>>;
@@ -46,6 +43,6 @@ export interface context {
   setAccessToken: string | any;
   refresh_token: string | any;
   setRefreshToken: string | any;
-  user: DecodedToken | undefined;
-  setUser: React.Dispatch<React.SetStateAction<DecodedToken | undefined>>;
+  user: UserDecoded | undefined;
+  setUser: React.Dispatch<React.SetStateAction<UserDecoded | undefined>>;
 }

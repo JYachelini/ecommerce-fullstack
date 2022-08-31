@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import { useContext } from 'react';
 import { Context } from '../Context/Context';
-import { DecodedToken } from '../Interfaces/token.interface';
+import { UserDecoded } from '../Interfaces/token.interface';
 
 const baseURL = 'http://localhost:8080';
 
@@ -29,7 +29,7 @@ export const useAxios = () => {
     if (access_token) {
       req.headers!.Authorization = 'Bearer ' + access_token;
 
-      const user: DecodedToken = jwt_decode(access_token!);
+      const user: UserDecoded = jwt_decode(access_token!);
       const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
 
       if (!isExpired) return req;

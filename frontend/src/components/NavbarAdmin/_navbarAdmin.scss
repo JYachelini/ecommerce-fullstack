@@ -1,0 +1,30 @@
+.navbar_wrapper {
+  .navbar_admin {
+    background-color: black;
+    text-align: right;
+    padding: 0 1rem;
+    a {
+      font-size: 0.8rem;
+      color: white;
+    }
+  }
+}
+
+.navbar_admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  width: 10vw;
+  padding-top: 1rem;
+  border-right: 1px solid gray;
+  h2 {
+    color: black;
+    font-size: 0.8rem;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    &:hover {
+      background-color: gray;
+    }
+  }
+}

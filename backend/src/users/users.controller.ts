@@ -115,18 +115,16 @@ export class UsersController {
     if (user.roles)
       throw new UnauthorizedException('You cannot update your own role.');
 
-    if (user.email)
-      throw new UnauthorizedException('You cannot update your own email.');
+    // if (user.email)
+    //   throw new UnauthorizedException('You cannot update your own email.');
 
     if (user._id)
       throw new UnauthorizedException('You cannot update your own id.');
 
-    if (user.username)
-      throw new UnauthorizedException('You cannot update your own username.');
+    // if (user.username)
+    //   throw new UnauthorizedException('You cannot update your own username.');
 
-    const userUpdated = await this.usersService.updateUser(id, user);
-    res
-      .status(HttpStatus.OK)
-      .json({ message: 'User Updated Succesfully.', userUpdated });
+    const resp = await this.usersService.updateUser(id, user);
+    res.status(resp.statusCode).json(resp.message);
   }
 }
