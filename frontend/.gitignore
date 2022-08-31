@@ -11,6 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+*.scss
+.sass-cache/
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
 
 # Editor directories and files
 .vscode/*

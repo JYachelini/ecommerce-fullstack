@@ -1,29 +1,81 @@
 import { Injectable } from '@nestjs/common';
-import { Error, Model, ObjectId } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
+import { ObjectId } from 'mongoose';
 
-import { Product } from './interfaces/products.interface';
-import { CreateProductDTO } from './dto/products.dto';
+import { ProductInterface } from './interfaces/products.interface';
+import { CreateProductDTO, UpdateProductDTO } from './dto/products.dto';
+import { ProductsRepository } from './products.repository';
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) {}
+  constructor(private readonly productRepository: ProductsRepository) {}
 
-  getProducts = async (): Promise<Product[]> => {
+  getProducts = async (
+    filter,
+    sort,
+    pages,
+    limitPages,
+  ): Promise<ProductInterface[]> => {
     try {
-      const products = await this.productModel.find();
+      const products = await this.productRepository.find(
+        filter,
+        sort,
+        pages,
+        limitPages,
+      );
       return products;
     } catch (error) {
       return error;
     }
   };
 
-  getProduct = async (id: ObjectId): Promise<Product> => {
+  getCategories = async (filter) => {
     try {
-      const product = await this.productModel.findById(id);
+      const categories = await this.productRepository.getCategories(filter);
+      return categories;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getCountProducts = async (filter) => {
+    try {
+      const count = await this.productRepository.findAndCount(filter);
+      return count;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getProduct = async (id: ObjectId): Promise<ProductInterface> => {
+    try {
+      const product = await this.productRepository.findById(id);
       return product;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getProductStock = async (id: ObjectId): Promise<ProductInterface> => {
+    try {
+      const product = await this.productRepository.findById(id, {
+        name: 0,
+        description: 0,
+        imageURL: 0,
+        price: 0,
+        category: 0,
+        subcategory: 0,
+        _id: 0,
+      });
+      return product;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  restProductStock = async (_id: ObjectId, quantity: number) => {
+    try {
+      const { stock } = await this.getProductStock(_id);
+      await this.updateProduct(_id, { stock: stock - quantity });
     } catch (error) {
       return error;
     }
@@ -31,10 +83,10 @@ export class ProductsService {
 
   createProduct = async (
     createProductDTO: CreateProductDTO,
-  ): Promise<Product> => {
+  ): Promise<ProductInterface> => {
     try {
-      const newProduct = new this.productModel(createProductDTO);
-      return await newProduct.save();
+      const newProduct = this.productRepository.createEntity(createProductDTO);
+      return newProduct;
     } catch (error) {
       return error;
     }
@@ -42,13 +94,12 @@ export class ProductsService {
 
   updateProduct = async (
     id: ObjectId,
-    createProductDTO: CreateProductDTO,
-  ): Promise<Product> => {
+    updateProductDTO: UpdateProductDTO,
+  ): Promise<ProductInterface> => {
     try {
-      const updatedProduct = await this.productModel.findByIdAndUpdate(
+      const updatedProduct = this.productRepository.updateObject(
         id,
-        createProductDTO,
-        { new: true },
+        updateProductDTO,
       );
       return updatedProduct;
     } catch (error) {
@@ -56,9 +107,9 @@ export class ProductsService {
     }
   };
 
-  deleteProduct = async (id: ObjectId): Promise<Product> => {
+  deleteProduct = async (id: ObjectId): Promise<boolean> => {
     try {
-      const deletedProduct = await this.productModel.findByIdAndDelete(id);
+      const deletedProduct = this.productRepository.deleteObject(id);
       return deletedProduct;
     } catch (error) {
       return error;
