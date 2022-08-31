@@ -15,10 +15,11 @@ import Order from './components/Order/Order';
 import ProfileOrders from './components/Profile/ProfileOrders';
 
 function App() {
-  const { setLimit, productsCart, user } = useContext(Context);
+  const { setLimit, productsCart, user, setProductId } = useContext(Context);
   const location = useLocation();
   useEffect(() => {
     setLimit(10);
+    setProductId(undefined);
   }, [location.pathname]);
 
   if (

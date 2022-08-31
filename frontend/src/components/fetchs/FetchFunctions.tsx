@@ -6,7 +6,7 @@ import {
   axiosResponseProducts,
 } from '../Interfaces/axiosResponse.interface';
 import { categories, ProductInterface } from '../Interfaces/products.interface';
-import { DecodedToken } from '../Interfaces/token.interface';
+import { UserDecoded } from '../Interfaces/token.interface';
 import jwt_decode from 'jwt-decode';
 import { useLocation } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ function FetchFunctions({ children }: any) {
     setUser,
     setLoading,
     productId,
+    productName,
   } = useContext(Context);
   const api = useAxios();
 
@@ -36,7 +37,7 @@ function FetchFunctions({ children }: any) {
           queryCategory ? `&category=${queryCategory}` : ''
         }${querySubcategory ? `&subcategory=${querySubcategory}` : ''}${
           productId ? `&id=${productId}` : ''
-        }`,
+        }${productName ? `&name=${productName}` : ''}`,
       )
       .then(({ data }: axiosResponseProducts) => {
         const filteredProducts: ProductInterface[] = [];
@@ -56,7 +57,14 @@ function FetchFunctions({ children }: any) {
         console.log(err);
         setLoading(false);
       });
-  }, [actual_page, limit, queryCategory, querySubcategory, productId]);
+  }, [
+    actual_page,
+    limit,
+    queryCategory,
+    querySubcategory,
+    productId,
+    productName,
+  ]);
 
   useEffect(() => {
     api
@@ -76,7 +84,7 @@ function FetchFunctions({ children }: any) {
 
   useEffect(() => {
     if (access_token) {
-      const decoded: DecodedToken = jwt_decode(access_token);
+      const decoded: UserDecoded = jwt_decode(access_token);
       setUser(decoded);
     }
   }, [access_token]);

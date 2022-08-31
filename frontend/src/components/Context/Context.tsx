@@ -4,7 +4,7 @@ import { categories, ProductInterface } from '../Interfaces/products.interface';
 import { useQuery } from '../CustomHooks/queryParams';
 import { useLocalStorage } from '../CustomHooks/useLocalStorage';
 import { CartInterface } from '../Interfaces/cart.interface';
-import { DecodedToken } from '../Interfaces/token.interface';
+import { UserDecoded } from '../Interfaces/token.interface';
 
 const INITIAL_STATE_PRODUCTS: ProductInterface[] = [];
 export const INITIAL_STATE_CART: CartInterface = {
@@ -60,6 +60,7 @@ export default function ContextProvider({ children }: any) {
   const [last_page, setLastPage] = useState<number>(1);
   const [total_items, setTotalItems] = useState<number>(0);
   const [productId, setProductId] = useState<string>();
+  const [productName, setProductName] = useState<string>();
 
   let query = useQuery();
   let queryCategory = query.get('category');
@@ -80,7 +81,7 @@ export default function ContextProvider({ children }: any) {
     'refresh_token',
     null,
   );
-  const [user, setUser] = useState<DecodedToken>();
+  const [user, setUser] = useState<UserDecoded>();
 
   return (
     <Context.Provider
@@ -92,6 +93,8 @@ export default function ContextProvider({ children }: any) {
         productsCart,
         productId,
         setProductId,
+        productName,
+        setProductName,
         addProduct,
         products,
         setProducts,

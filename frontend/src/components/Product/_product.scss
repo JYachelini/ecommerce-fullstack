@@ -1,0 +1,150 @@
+.product {
+  display: flex;
+  margin: auto 0;
+  flex-direction: column;
+  width: 16rem;
+  height: 20rem;
+  border: 1px solid red;
+  padding: 0.5rem;
+  justify-content: space-between;
+  .product_image {
+    align-items: center;
+    border: 1px solid rosybrown;
+    display: flex;
+    justify-content: center;
+    img {
+      width: auto;
+      padding: 1.25rem;
+      height: 12rem;
+    }
+  }
+  .product_info {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    .product_info-name {
+      font-size: 1.875rem;
+      line-height: 2.25rem;
+    }
+    .product_info-description {
+      color: gray;
+    }
+    .product_info-price {
+      font-weight: 700;
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+  }
+  .product_add {
+    display: flex;
+    justify-content: space-between;
+  }
+  .product_admin-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    button {
+      padding: 0 1rem;
+      cursor: pointer;
+    }
+  }
+}
+
+.single_product {
+  display: flex;
+  height: 40rem;
+  border: 1px solid red;
+  margin: 0 15rem;
+  .single_product-image_wrapper {
+    width: 60%;
+    display: flex;
+    margin: auto;
+    height: 100%;
+    justify-content: center;
+    img {
+      width: 100%;
+      object-fit: contain;
+    }
+  }
+  .single_product-details {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    div,
+    button {
+      padding: 1rem;
+    }
+    .single_product-details_wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      .single_product-details_description {
+        color: gray;
+        font-size: 0.9rem;
+      }
+    }
+    button {
+      cursor: pointer;
+    }
+  }
+}
+
+.product_edit,
+.product_delete {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .product_edit-form,
+  .product_delete-wrapper {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+    // align-items: center;
+    flex-direction: column;
+    border: 1px solid black;
+    background-color: white;
+    margin: auto;
+    gap: 1rem;
+    .product_edit-label {
+      display: flex;
+      justify-content: space-between;
+      width: 30vw;
+      padding: 1.5rem 0.5rem;
+      border: 1px solid red;
+      text-transform: capitalize;
+      cursor: pointer;
+      align-items: center;
+      .product_edit-input {
+        padding: 0.5rem 0.2rem;
+        &:focus-visible {
+          outline: none;
+        }
+      }
+    }
+    .product_edit-buttons {
+      display: flex;
+      justify-content: space-around;
+      button {
+        padding: 0.5rem 1rem;
+      }
+    }
+  }
+  .product_delete-wrapper {
+    padding: 2rem;
+    .product_delete-buttons {
+      display: flex;
+      justify-content: space-around;
+      button {
+        padding: 0 1rem;
+      }
+    }
+  }
+}

@@ -74,3 +74,9 @@ export interface axiosOrders {
     orders: CartInterfaceDB[];
   };
 }
+
+export interface axiosUpdateUser {
+  data: {
+    message: string;
+  };
+}

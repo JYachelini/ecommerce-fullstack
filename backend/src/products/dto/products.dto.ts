@@ -33,7 +33,6 @@ export class CreateProductDTO {
 
   @IsNumber()
   @Min(0)
-  @IsOptional()
   stock: number;
 }
 

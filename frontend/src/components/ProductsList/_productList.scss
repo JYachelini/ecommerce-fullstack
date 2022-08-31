@@ -1,0 +1,11 @@
+main {
+  .products_list,
+  .loading {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 5rem;
+    height: 75vh;
+    margin-bottom: 5rem;
+    gap: 2.5rem;
+  }
+}
