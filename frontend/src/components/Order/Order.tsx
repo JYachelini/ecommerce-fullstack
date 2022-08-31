@@ -107,7 +107,7 @@ function Order() {
     e.preventDefault();
     setLoading(true);
     api
-      .post('http://localhost:8080/cart', { ...valuesOrder, userPhone })
+      .post('/cart', { ...valuesOrder, userPhone })
       .then(({ data }) => {
         setResponseError(false);
         if (data._id) {

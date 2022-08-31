@@ -90,7 +90,7 @@ function EditProduct({ product, handleEdit }: EditProduct) {
     try {
       setLoading(true);
       api
-        .put(`http://localhost:8080/products?id=${_id}`, { ...productValues })
+        .put(`/products?id=${_id}`, { ...productValues })
         .then(() => {
           setProducts((prevState) => {
             const newState = prevState.map((obj) => {

@@ -9,10 +9,17 @@ async function bootstrap() {
   const configService = app.get(ConfigService); // ConfigService return the .env values
 
   const front_port = configService.get('FRONTEND_PORT') || 5173;
-  app.enableCors({
-    origin: `http://localhost:${front_port}`,
-    credentials: true,
-  });
+  if (configService.get('NODE_ENV') == 'dev') {
+    app.enableCors({
+      origin: `http://localhost:${front_port}`,
+      credentials: true,
+    });
+  } else if (configService.get('NODE_ENV') == 'prod') {
+    app.enableCors({
+      origin: `https://jyachelini.github.io/ecommerce-fullstack/`,
+      credentials: true,
+    });
+  }
 
   app.useGlobalPipes(
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),

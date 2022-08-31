@@ -16,7 +16,7 @@ function DeleteProduct({ handleConfirmDelete, name, _id }: PropsDeleteProduct) {
     try {
       setLoading(true);
       api
-        .delete(`http://localhost:8080/products?id=${_id}`)
+        .delete(`/products?id=${_id}`)
         .then(() => {
           setProducts((current) =>
             current.filter((product) => {

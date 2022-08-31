@@ -12,7 +12,7 @@ function ProductById() {
   const api = useAxios();
 
   useEffect(() => {
-    api.get(`http://localhost:8080/products/${id}`).then(({ data }) => {
+    api.get(`/products/${id}`).then(({ data }) => {
       setProduct(data.product);
     });
   }, [id]);

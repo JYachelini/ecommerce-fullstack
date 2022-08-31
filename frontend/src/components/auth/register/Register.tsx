@@ -114,7 +114,7 @@ function Register() {
     e.preventDefault();
     setLoading(true);
     api
-      .post('http://localhost:8080/register', registerValues)
+      .post('/register', registerValues)
       .then(({ data }: axiosResponseRegisterSuccess) => {
         if (data._id) {
           setAccessToken(data.access_token);

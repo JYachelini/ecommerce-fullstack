@@ -19,9 +19,7 @@ function ProfileOrders() {
   useEffect(() => {
     setLoading(true);
     api
-      .get(
-        `http://localhost:8080/cart?userId=${user?._id}&page=${actual_page}&limit=${limit}`,
-      )
+      .get(`/cart?userId=${user?._id}&page=${actual_page}&limit=${limit}`)
       .then(({ data }: axiosOrders) => {
         setOrders(data.orders);
         setTotalITems(data.total_items);

@@ -27,7 +27,7 @@ function Navbar() {
   const logout = () => {
     setLoading(true);
     api
-      .post('http://localhost:8080/logout')
+      .post('/logout')
       .then(() => {
         setAccessToken(null);
         setRefreshToken(null);

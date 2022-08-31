@@ -21,7 +21,7 @@ function AdminPanel_Users() {
     setLoading(true);
     api
       .get(
-        `http://localhost:8080/users?limit=${limit}&page=${actual_page}${
+        `/users?limit=${limit}&page=${actual_page}${
           userId ? `&userId=${userId}` : ''
         }`,
       )

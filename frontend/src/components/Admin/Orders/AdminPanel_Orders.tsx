@@ -20,7 +20,7 @@ function AdminPanel_Orders() {
     setLoading(true);
     api
       .get(
-        `http://localhost:8080/cart?page=${actual_page}&limit=${limit}${
+        `/cart?page=${actual_page}&limit=${limit}${
           userId ? `&userId=${userId}` : ''
         }${cartId ? `&cartId=${cartId}` : ''}`,
       )

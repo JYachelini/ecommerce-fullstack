@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { UserInterface } from '../../Interfaces/user.interface';
 
 interface PropsUserList {
