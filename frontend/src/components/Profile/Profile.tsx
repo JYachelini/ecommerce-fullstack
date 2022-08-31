@@ -91,7 +91,7 @@ function Profile() {
     try {
       setLoading(true);
       api
-        .put(`user/${_id}`, { ...userValues })
+        .put(`/user/${_id}`, { ...userValues })
         .then(({ data }: axiosUpdateUser) => {
           console.log(data);
           setLoading(false);

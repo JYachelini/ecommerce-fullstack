@@ -54,7 +54,7 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     api
-      .post('http://localhost:8080/login', loginValues)
+      .post('/login', loginValues)
       .then(({ data }: axiosResponseLoginSuccess) => {
         if (data.access_token) {
           setAccessToken(data.access_token);
