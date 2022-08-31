@@ -16,7 +16,7 @@ async function bootstrap() {
     });
   } else if (configService.get('NODE_ENV') == 'prod') {
     app.enableCors({
-      origin: `https://jyachelini.github.io/ecommerce-fullstack/`,
+      origin: `https://jyachelini.github.io`,
       credentials: true,
     });
   }
