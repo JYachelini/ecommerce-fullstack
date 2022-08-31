@@ -11,6 +11,7 @@ import {
   NotFoundException,
   Query,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ObjectId } from 'mongoose';
@@ -120,6 +121,8 @@ export class ProductsController {
     @Body() updateProductDTO: UpdateProductDTO,
     @Query('id') id: ObjectId,
   ) {
+    if (Object.keys(updateProductDTO).length == 0)
+      throw new BadRequestException();
     const productUpdated = await this.productService.updateProduct(
       id,
       updateProductDTO,

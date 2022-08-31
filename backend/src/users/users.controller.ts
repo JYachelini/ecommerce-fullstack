@@ -8,11 +8,11 @@ import {
   Res,
   Req,
   UseGuards,
-  UnauthorizedException,
   HttpStatus,
   Query,
   forwardRef,
   Inject,
+  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import {
@@ -22,9 +22,9 @@ import {
   UserIsUserGuard,
   JwtRefreshAuthGuard,
 } from '../auth/guards';
-import { CreateUserDTO } from './dto/user.dto';
+import { CreateUserDTO, UpdateUserDTO } from './dto/user.dto';
 import { UsersService } from './users.service';
-import { User, UserRole } from './interfaces/user.interface';
+import { UserRole } from './interfaces/user.interface';
 import { ObjectId } from 'mongoose';
 import { GetCurrentUser, hasRoles } from '../auth/decorator';
 import { Response } from 'express';
@@ -111,20 +111,14 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard, UserIsUserGuard)
   @Put('user/:id')
-  async updateUser(@Body() user: User, @Param('id') id: ObjectId, @Res() res) {
-    if (user.roles)
-      throw new UnauthorizedException('You cannot update your own role.');
-
-    // if (user.email)
-    //   throw new UnauthorizedException('You cannot update your own email.');
-
-    if (user._id)
-      throw new UnauthorizedException('You cannot update your own id.');
-
-    // if (user.username)
-    //   throw new UnauthorizedException('You cannot update your own username.');
+  async updateUser(
+    @Body() user: UpdateUserDTO,
+    @Param('id') id: ObjectId,
+    @Res() res,
+  ) {
+    if (Object.keys(user).length == 0) throw new BadRequestException();
 
     const resp = await this.usersService.updateUser(id, user);
-    res.status(resp.statusCode).json(resp.message);
+    res.status(resp.statusCode).json({ message: resp.message });
   }
 }

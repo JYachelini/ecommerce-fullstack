@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -9,7 +10,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { ObjectId } from 'mongoose';
 import { hasRoles } from 'src/auth/decorator';
 import { JwtAuthGuard, RolesGuard } from 'src/auth/guards';
@@ -31,9 +32,10 @@ export class CartController {
   async createOrder(
     @Res() res: Response,
     @Body() createCartDTO: CreateCartDTO,
-    @Req() req,
+    @Req() req: Request,
   ) {
     const user = req.user;
+    if (Object.keys(createCartDTO).length == 0) throw new BadRequestException();
     const resp = await this.cartService.createOrder(createCartDTO, user);
     if (resp.errors) {
       res.status(HttpStatus.CONFLICT).json(resp.errors);
@@ -42,6 +44,8 @@ export class CartController {
     }
   }
 
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/')
   async getCarts(
     @Res() res,
