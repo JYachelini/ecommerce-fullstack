@@ -4,6 +4,7 @@ import {
   IsNumber,
   Min,
   IsOptional,
+  IsMongoId,
 } from 'class-validator';
 
 export class CreateProductDTO {
@@ -34,46 +35,40 @@ export class CreateProductDTO {
   @Min(0)
   @IsOptional()
   stock: number;
-
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export class UpdateProductDTO {
   @IsString()
   @MinLength(3)
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsString()
   @MinLength(3)
   @IsOptional()
-  description: string;
+  description?: string;
 
   @IsString()
   @IsOptional()
-  imageURL: string;
-
-  @IsString()
-  @MinLength(3)
-  @IsOptional()
-  category: string;
+  imageURL?: string;
 
   @IsString()
   @MinLength(3)
   @IsOptional()
-  subcategory: string;
+  category?: string;
+
+  @IsString()
+  @MinLength(3)
+  @IsOptional()
+  subcategory?: string;
 
   @IsNumber()
   @Min(0)
   @IsOptional()
-  price: number;
+  price?: number;
 
   @IsNumber()
   @Min(0)
   @IsOptional()
-  stock: number;
-
-  createdAt: Date;
-  updatedAt: Date;
+  stock?: number;
 }

@@ -22,7 +22,7 @@ function RegisterInputs(props: PropsRegisterInputs) {
     setFocused(true);
   };
 
-  if (inputProps.name === 'phone') {
+  if (inputProps.name === 'phone' || inputProps.name === 'userPhone') {
     return (
       <span className="register_form-input_wrapper">
         <PhoneInput

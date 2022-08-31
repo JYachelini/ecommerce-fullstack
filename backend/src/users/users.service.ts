@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ObjectId } from 'mongoose';
-import { async } from 'rxjs';
 import { CreateUserDTO } from './dto/user.dto';
-import { User } from './interfaces/user.interface';
+import { UserInterface } from './interfaces/user.interface';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UsersRepository) {}
+  constructor(
+    @Inject(forwardRef(() => UsersRepository))
+    private readonly userRepository: UsersRepository,
+  ) {}
 
   getUsers = async (filter, sort, pages, limitPages) => {
     return await this.userRepository.find(filter, sort, pages, limitPages);
@@ -29,10 +31,11 @@ export class UsersService {
     return await this.userRepository.register(user);
   };
 
-  updateUser = async (id: ObjectId, user: User) => {
+  updateUser = async (id: ObjectId, user: UserInterface) => {
     delete user.roles;
     delete user._id;
     delete user.email;
+    delete user.username;
     return await this.userRepository.updateObject(id, user);
   };
 }

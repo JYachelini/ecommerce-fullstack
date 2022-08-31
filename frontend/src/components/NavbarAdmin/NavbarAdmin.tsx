@@ -40,7 +40,7 @@ function NavbarAdmin({ handleElementToView }: PropsNavbarAdmin) {
               handleElementToView!('carts');
             }}
           >
-            Carritos
+            Pedidos
           </h2>
         </div>
         <div>

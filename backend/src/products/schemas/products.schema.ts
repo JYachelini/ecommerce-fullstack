@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, model } from 'mongoose';
 import { Factory } from 'nestjs-seeder';
 
 export type ProductDocument = Product & Document;
@@ -34,3 +34,5 @@ export class Product {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+export const ProductModel = model(Product.name, ProductSchema);

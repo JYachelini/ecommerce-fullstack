@@ -3,22 +3,20 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ConfigType } from '@nestjs/config';
 import config from '../../config/config';
+import { UserInterface } from 'src/users/interfaces/user.interface';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: configService.JWT_SECRET, // Protect this with .env
+      secretOrKey: configService.JWT_SECRET,
     });
   }
 
-  validate = async (payload: any) => {
-    return {
-      ...payload,
-    };
+  validate = async (payload: UserInterface) => {
+    return payload;
   };
 }

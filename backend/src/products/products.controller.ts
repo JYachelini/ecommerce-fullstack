@@ -14,9 +14,8 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ObjectId } from 'mongoose';
-import { hasRoles } from '../auth/decorator/roles.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { hasRoles } from '../auth/decorator';
+import { JwtAuthGuard, RolesGuard } from '../auth/guards/';
 import { UserRole } from '../users/interfaces/user.interface';
 import { CreateProductDTO, UpdateProductDTO } from './dto/products.dto';
 import { ProductsService } from './products.service';
@@ -32,6 +31,7 @@ export class ProductsController {
   async getProducts(
     @Res() res: Response,
     @Query('name') name: string,
+    @Query('id') _id: ObjectId,
     @Query('category') category: string,
     @Query('subcategory') subcategory: string,
     @Query('sort') sort: string,
@@ -60,6 +60,10 @@ export class ProductsController {
       filters = { name };
     } else if (category) {
       filters = { category };
+    }
+
+    if (_id) {
+      filters = { _id };
     }
 
     if (sort) {

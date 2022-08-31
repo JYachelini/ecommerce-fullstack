@@ -70,15 +70,15 @@ export abstract class EntityRepository<T extends Document> {
     }
   };
 
-  createMany = async (createManyData: unknown): Promise<any> => {
-    try {
-      const test = await this.entityModel.insertMany(createManyData);
-      console.log(test);
-      return test;
-    } catch (error) {
-      return error;
-    }
-  };
+  // createMany = async (createManyData: unknown): Promise<any> => {
+  //   try {
+  //     const test = await this.entityModel.insertMany(createManyData);
+  //     console.log(test);
+  //     return test;
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   updateObject = async (
     Filter: FilterQuery<T>,
@@ -92,6 +92,18 @@ export abstract class EntityRepository<T extends Document> {
           new: true,
         },
       );
+    } catch (error) {
+      return error;
+    }
+  };
+  findOneAndUpdate = async (
+    Filter: FilterQuery<T>,
+    updateEntityData: UpdateQuery<unknown>,
+  ): Promise<T | null> => {
+    try {
+      return await this.entityModel.findOneAndUpdate(Filter, updateEntityData, {
+        new: true,
+      });
     } catch (error) {
       return error;
     }

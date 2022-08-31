@@ -1,13 +1,15 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserInterfaceRegister } from '../../Interfaces/user.interface';
 import RegisterInputs from './RegisterInputs';
 import 'react-phone-number-input/style.css';
+import { Context } from '../../Context/Context';
 import {
   axiosResponseRegisterError,
   axiosResponseRegisterSuccess,
 } from '../../Interfaces/axiosResponse.interface';
+import { useAxios } from '../../CustomHooks/useAxios';
+import Loading from '../../Loading/Loading';
 
 const INITIAL_STATE_REGISTER: UserInterfaceRegister = {
   name: '',
@@ -18,11 +20,15 @@ const INITIAL_STATE_REGISTER: UserInterfaceRegister = {
   confirmPassword: '',
 };
 
-function register() {
+function Register() {
+  const { setAccessToken, setRefreshToken, loading, setLoading } =
+    useContext(Context);
   const [registerValues, setRegisterValues] = useState<UserInterfaceRegister>(
     INITIAL_STATE_REGISTER,
   );
   const [isDisabledSubmit, setIsDisabledSubmit] = useState(true);
+  const api = useAxios();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const { email, confirmPassword, name, password, phone, username } =
@@ -102,29 +108,32 @@ function register() {
     setRegisterValues({ ...registerValues, [name]: value });
   };
 
-  const [isRegistered, setIsRegistered] = useState<string | null>(null);
+  const [errorRegister, setErrorRegister] = useState<string | null>(null);
 
-  const submitAccount = (e: React.FormEvent<HTMLFormElement>) => {
+  const register = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post('http://localhost:8080/register', registerValues, {
-        withCredentials: true,
-      })
+    setLoading(true);
+    api
+      .post('http://localhost:8080/register', registerValues)
       .then(({ data }: axiosResponseRegisterSuccess) => {
         if (data._id) {
-          window.location.href = '/login';
+          setAccessToken(data.access_token);
+          setRefreshToken(data.refresh_token);
+          navigate('/login');
+          setLoading(false);
         } else {
-          setIsRegistered('Error inesperado');
+          setLoading(false);
+          setErrorRegister('Error inesperado');
         }
       })
       .catch(({ response }: axiosResponseRegisterError) => {
-        console.log(response.data);
+        setLoading(false);
         if (response.data.error === 'Email already exist.') {
-          setIsRegistered('El Email ya existe.');
+          setErrorRegister('El Email ya existe.');
         } else if (response.data.error === 'User already exist.') {
-          setIsRegistered('El usuario ya existe.');
+          setErrorRegister('El usuario ya existe.');
         } else {
-          setIsRegistered('Error inesperado');
+          setErrorRegister('Error inesperado');
         }
       });
   };
@@ -132,8 +141,12 @@ function register() {
   return (
     <div className="register">
       <h2>Crear cuenta</h2>
-      {isRegistered !== null ? <span>{`${isRegistered}`}</span> : null}
-      <form onSubmit={submitAccount} className="register_form">
+      {loading ? (
+        <Loading />
+      ) : (
+        <>{errorRegister !== null ? <span>{`${errorRegister}`}</span> : null}</>
+      )}
+      <form onSubmit={register} className="register_form">
         {inputs.map((input) => {
           if (input.name === 'phone')
             return (
@@ -163,4 +176,4 @@ function register() {
   );
 }
 
-export default register;
+export default Register;

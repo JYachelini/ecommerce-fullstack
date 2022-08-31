@@ -5,6 +5,11 @@
 
 a {
   text-decoration: none;
+  color: black;
+}
+
+.App {
+  min-height: 100vh;
 }
 
 main {
@@ -29,18 +34,20 @@ main .products_pages * {
 main .products_list {
   display: flex;
   flex-wrap: wrap;
-  margin: 5rem;
-  margin-top: 0;
+  margin-left: 5rem;
+  margin-bottom: 5rem;
   gap: 2.5rem;
 }
 
 .product {
   display: flex;
+  margin: auto 0;
   flex-direction: column;
   width: 16rem;
   height: 20rem;
   border: 1px solid red;
   padding: 0.5rem;
+  justify-content: space-between;
 }
 .product .product_image {
   align-items: center;
@@ -56,7 +63,6 @@ main .products_list {
 .product .product_info {
   display: flex;
   flex-direction: column;
-  height: 30%;
   text-align: center;
 }
 .product .product_info .product_info-name {
@@ -75,13 +81,141 @@ main .products_list {
   display: flex;
   justify-content: space-between;
 }
+.product .product_admin-buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+.product .product_admin-buttons button {
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.single_product {
+  display: flex;
+  height: 40rem;
+  border: 1px solid red;
+  margin: 0 15rem;
+}
+.single_product .single_product-image_wrapper {
+  width: 60%;
+  display: flex;
+  margin: auto;
+  height: 100%;
+  justify-content: center;
+}
+.single_product .single_product-image_wrapper img {
+  width: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.single_product .single_product-details {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.single_product .single_product-details div,
+.single_product .single_product-details button {
+  padding: 1rem;
+}
+.single_product .single_product-details .single_product-details_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.single_product .single_product-details .single_product-details_wrapper .single_product-details_description {
+  color: gray;
+  font-size: 0.9rem;
+}
+.single_product .single_product-details button {
+  cursor: pointer;
+}
+
+.product_edit,
+.product_delete {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.product_edit .product_edit-form,
+.product_edit .product_delete-wrapper,
+.product_delete .product_edit-form,
+.product_delete .product_delete-wrapper {
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  flex-direction: column;
+  border: 1px solid black;
+  background-color: white;
+  margin: auto;
+  gap: 1rem;
+}
+.product_edit .product_edit-form .product_edit-label,
+.product_edit .product_delete-wrapper .product_edit-label,
+.product_delete .product_edit-form .product_edit-label,
+.product_delete .product_delete-wrapper .product_edit-label {
+  display: flex;
+  justify-content: space-between;
+  width: 30vw;
+  padding: 1.5rem 0.5rem;
+  border: 1px solid red;
+  text-transform: capitalize;
+  cursor: pointer;
+  align-items: center;
+}
+.product_edit .product_edit-form .product_edit-label .product_edit-input,
+.product_edit .product_delete-wrapper .product_edit-label .product_edit-input,
+.product_delete .product_edit-form .product_edit-label .product_edit-input,
+.product_delete .product_delete-wrapper .product_edit-label .product_edit-input {
+  padding: 0.5rem 0.2rem;
+}
+.product_edit .product_edit-form .product_edit-label .product_edit-input:focus-visible,
+.product_edit .product_delete-wrapper .product_edit-label .product_edit-input:focus-visible,
+.product_delete .product_edit-form .product_edit-label .product_edit-input:focus-visible,
+.product_delete .product_delete-wrapper .product_edit-label .product_edit-input:focus-visible {
+  outline: none;
+}
+.product_edit .product_edit-form .product_edit-buttons,
+.product_edit .product_delete-wrapper .product_edit-buttons,
+.product_delete .product_edit-form .product_edit-buttons,
+.product_delete .product_delete-wrapper .product_edit-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.product_edit .product_edit-form .product_edit-buttons button,
+.product_edit .product_delete-wrapper .product_edit-buttons button,
+.product_delete .product_edit-form .product_edit-buttons button,
+.product_delete .product_delete-wrapper .product_edit-buttons button {
+  padding: 0.5rem 1rem;
+}
+.product_edit .product_delete-wrapper,
+.product_delete .product_delete-wrapper {
+  padding: 2rem;
+}
+.product_edit .product_delete-wrapper .product_delete-buttons,
+.product_delete .product_delete-wrapper .product_delete-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.product_edit .product_delete-wrapper .product_delete-buttons button,
+.product_delete .product_delete-wrapper .product_delete-buttons button {
+  padding: 0 1rem;
+}
 
 .navbar_wrapper {
   position: fixed;
   top: 0;
   width: 100%;
 }
-.navbar_wrapper .navbar_user {
+.navbar_wrapper .navbar {
   padding: 1rem;
   display: flex;
   justify-content: space-around;
@@ -91,20 +225,20 @@ main .products_list {
   border-bottom: 1px solid red;
   background-color: white;
 }
-.navbar_wrapper .navbar_user .navbar-logo h2,
-.navbar_wrapper .navbar_user .navbar-promos h2,
-.navbar_wrapper .navbar_user .navbar-categories h2,
-.navbar_wrapper .navbar_user .navbar-cart h2,
-.navbar_wrapper .navbar_user .navbar-user h2 {
+.navbar_wrapper .navbar .navbar-logo h2,
+.navbar_wrapper .navbar .navbar-promos h2,
+.navbar_wrapper .navbar .navbar-categories h2,
+.navbar_wrapper .navbar .navbar-cart h2,
+.navbar_wrapper .navbar .navbar-user h2 {
   padding: 1rem;
   border: 1px solid rosybrown;
   color: black;
 }
-.navbar_wrapper .navbar_user .navbar-categories {
+.navbar_wrapper .navbar .navbar-categories {
   position: relative;
   cursor: pointer;
 }
-.navbar_wrapper .navbar_user .navbar-categories .navbar-categories_list {
+.navbar_wrapper .navbar .navbar-categories .navbar-categories_list {
   position: absolute;
   list-style: none;
   display: flex;
@@ -115,16 +249,16 @@ main .products_list {
   border: 1px solid red;
   background-color: white;
 }
-.navbar_wrapper .navbar_user .navbar-categories .navbar-categories_list .navbar-categories_list-category {
+.navbar_wrapper .navbar .navbar-categories .navbar-categories_list .navbar-categories_list-category {
   cursor: pointer;
   position: relative;
   display: flex;
 }
-.navbar_wrapper .navbar_user .navbar-categories .navbar-categories_list .navbar-categories_list-category.active {
+.navbar_wrapper .navbar .navbar-categories .navbar-categories_list .navbar-categories_list-category.active {
   background-color: orange;
   transition: all 250ms;
 }
-.navbar_wrapper .navbar_user .navbar-categories .navbar-categories_list .navbar-categories_list-category a {
+.navbar_wrapper .navbar .navbar-categories .navbar-categories_list .navbar-categories_list-category a {
   padding: 0.5rem;
   display: flex;
   justify-content: center;
@@ -132,7 +266,7 @@ main .products_list {
   text-decoration: none;
   color: black;
 }
-.navbar_wrapper .navbar_user .navbar-subcategories {
+.navbar_wrapper .navbar .navbar-subcategories {
   position: absolute;
   left: 100%;
   min-height: 80vh;
@@ -140,21 +274,21 @@ main .products_list {
   background-color: white;
   border: 1px solid red;
 }
-.navbar_wrapper .navbar_user .navbar-subcategories .navbar-subcategories_list {
+.navbar_wrapper .navbar .navbar-subcategories .navbar-subcategories_list {
   display: flex;
   flex-direction: column;
   list-style: none;
 }
-.navbar_wrapper .navbar_user .navbar-subcategories .navbar-subcategories_list .navbar-subcategories_list-subcategory {
+.navbar_wrapper .navbar .navbar-subcategories .navbar-subcategories_list .navbar-subcategories_list-subcategory {
   display: flex;
   justify-content: center;
   width: 100%;
 }
-.navbar_wrapper .navbar_user .navbar-subcategories .navbar-subcategories_list .navbar-subcategories_list-subcategory:hover {
+.navbar_wrapper .navbar .navbar-subcategories .navbar-subcategories_list .navbar-subcategories_list-subcategory:hover {
   background-color: orange;
   transition: all 250ms;
 }
-.navbar_wrapper .navbar_user .navbar-subcategories .navbar-subcategories_list .navbar-subcategories_list-subcategory a {
+.navbar_wrapper .navbar .navbar-subcategories .navbar-subcategories_list .navbar-subcategories_list-subcategory a {
   padding: 1rem;
   display: flex;
   justify-content: center;
@@ -162,19 +296,36 @@ main .products_list {
   text-decoration: none;
   color: black;
 }
-.navbar_wrapper .navbar_user .navbar-user {
+.navbar_wrapper .navbar .navbar-user {
   height: 100%;
 }
-.navbar_wrapper .navbar_user .navbar-user .navbar-user_auth,
-.navbar_wrapper .navbar_user .navbar-user .navbar-user_profile {
+.navbar_wrapper .navbar .navbar-user .navbar-user_auth,
+.navbar_wrapper .navbar .navbar-user .navbar-user_profile {
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
-.navbar_wrapper .navbar_user .navbar-user .navbar-user_auth h2,
-.navbar_wrapper .navbar_user .navbar-user .navbar-user_profile h2 {
+.navbar_wrapper .navbar .navbar-user .navbar-user_auth h2,
+.navbar_wrapper .navbar .navbar-user .navbar-user_profile h2 {
   padding: 0.3rem;
   font-size: 0.875rem;
+  text-align: center;
+  cursor: pointer;
+}
+.navbar_wrapper .navbar .navbar-cart {
+  position: relative;
+}
+.navbar_wrapper .navbar .navbar-cart .navbar-cart_logo .navbar-cart_quantity {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  font-weight: 400;
+  font-size: 1rem;
+  background-color: orange;
+  border-radius: 100%;
+  height: 20px;
+  width: 20px;
   text-align: center;
 }
 
@@ -192,7 +343,7 @@ main .products_list {
   display: flex;
   flex-direction: column;
   gap: 5rem;
-  width: 10%;
+  width: 10vw;
   padding-top: 1rem;
   border-right: 1px solid gray;
 }
@@ -328,28 +479,33 @@ main .products_list {
   color: gray;
 }
 
-.profile {
+.profile_wrapper {
+  display: flex;
+  height: 60vh;
+  border: 1px solid rosybrown;
+}
+.profile_wrapper .profile {
   margin: auto;
   text-align: center;
   border: 1px solid red;
   padding: 2.5rem;
 }
-.profile .profile-title {
+.profile_wrapper .profile .profile-title {
   display: flex;
   flex-direction: column;
 }
-.profile .profile-title span {
+.profile_wrapper .profile .profile-title span {
   font-weight: 400;
   font-size: 0.7rem;
   color: gray;
 }
-.profile .profile_values {
+.profile_wrapper .profile .profile_values {
   margin-top: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.profile .profile_values span {
+.profile_wrapper .profile .profile_values span {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -358,20 +514,90 @@ main .products_list {
   border: 1px solid rosybrown;
   cursor: pointer;
 }
-.profile .profile_values span svg {
+.profile_wrapper .profile .profile_values span svg {
   width: 20px;
   height: 20px;
   padding: 0.2rem;
   border: 1px solid gray;
   border-radius: 0.5rem;
 }
+.profile_wrapper .profile_navbar {
+  width: 15vw;
+  height: 100%;
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+.profile_wrapper .profile_navbar a {
+  width: 70%;
+  text-align: center;
+  margin: 0 auto;
+  border: 1px solid orange;
+  padding: 1rem;
+}
+.profile_wrapper .profile_orders-wrapper {
+  display: flex;
+  height: 100%;
+  width: 85vw;
+}
+.profile_wrapper .profile_orders-wrapper .prev-button,
+.profile_wrapper .profile_orders-wrapper .next-button {
+  width: 20%;
+  margin: auto;
+}
+.profile_wrapper .profile_orders-wrapper .inactive {
+  opacity: 0;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders {
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order {
+  padding: 1rem;
+  border-bottom: 1px solid black;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order:last-child {
+  border: none;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order .order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order .order-details .order-status .done {
+  color: green;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order .order-products_wrapper {
+  display: flex;
+  gap: 1rem;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order .order-products_wrapper button {
+  width: 10vw;
+}
+.profile_wrapper .profile_orders-wrapper .profile_orders .order .order-products_wrapper .order-products {
+  display: flex;
+  gap: 1rem;
+}
 
 .AppAdmin {
   display: flex;
+  position: relative;
 }
 .AppAdmin main {
   padding: 0;
-  width: 100%;
+  width: 90vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -379,4 +605,315 @@ main .products_list {
 }
 .AppAdmin main .products_list {
   height: 70vh;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 85vw;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper input {
+  margin: auto;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper {
+  display: flex;
+  height: 80%;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .prev-button,
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .next-button {
+  width: 20%;
+  margin: auto;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .inactive {
+  opacity: 0;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders {
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order {
+  padding: 1rem;
+  border-bottom: 1px solid black;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order:last-child {
+  border: none;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-details .order-status .done {
+  color: green;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-products_wrapper {
+  display: flex;
+  gap: 1rem;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-products_wrapper button {
+  width: 10vw;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-products_wrapper .order-products {
+  display: flex;
+  gap: 1rem;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-user_info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  text-align: right;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-user_info span {
+  font-size: 0.8rem;
+  color: gray;
+}
+.AppAdmin main .admin_dashboard-orders_wrapper .admin_dashboard-orders_navigation_wrapper .admin_dashboard-orders .order .order-user_info span strong {
+  font-size: 1rem;
+  color: black;
+}
+.AppAdmin main .admin_dashboard-users_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid black;
+  width: 90%;
+  height: 70%;
+  gap: 3vh;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user {
+  height: 100%;
+  display: flex;
+  text-align: center;
+  gap: 5rem;
+  cursor: pointer;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_username {
+  text-align: left;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_id,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_name,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_phone,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_email,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_username {
+  font-size: 0.8rem;
+  color: gray;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_id strong,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_name strong,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_phone strong,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_email strong,
+.AppAdmin main .admin_dashboard-users_wrapper .admin_dashboard-users .user .user_username strong {
+  color: black;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .buttons_wrapper {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+.AppAdmin main .admin_dashboard-users_wrapper .buttons_wrapper button {
+  padding: 0 1rem;
+}
+
+.cart_view {
+  height: 60vh;
+  width: 50vw;
+  border: 1px solid black;
+  padding: 1rem;
+  margin: auto;
+}
+.cart_view .cart_items {
+  overflow: hidden;
+  overflow-y: auto;
+  height: 90%;
+  border-bottom: 1px solid red;
+  padding: 0 0.5rem;
+}
+.cart_view .cart_items a:last-child article {
+  border-bottom: none;
+}
+.cart_view .cart_items a article {
+  height: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid orange;
+}
+.cart_view .cart_items a article .cart_items-image_wrapper {
+  width: 45%;
+}
+.cart_view .cart_items a article .cart_items-image_wrapper img {
+  width: 100%;
+}
+.cart_view .cart_items a article .cart_items-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  text-align: right;
+}
+.cart_view .cart_info {
+  display: flex;
+  height: 10%;
+  justify-content: flex-end;
+  gap: 3rem;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.creating_order {
+  height: 70vh;
+  margin: 0 20vw;
+  border: 1px solid red;
+  display: flex;
+}
+.creating_order .cart_view {
+  margin: 0;
+  width: 40%;
+  padding: 0;
+  height: 100%;
+}
+.creating_order .cart_view .cart_items {
+  padding: 0;
+}
+.creating_order .cart_view .cart_items a article {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+.creating_order .cart_view .cart_items a article .cart_items-info {
+  text-align: center;
+}
+.creating_order .cart_view .cart_items a article .cart_items-info div h3 {
+  font-weight: 400;
+  font-size: 1rem;
+}
+.creating_order .cart_view .cart_info {
+  padding: 0;
+  justify-content: center;
+}
+.creating_order .order_user-info {
+  width: 100%;
+  padding: 1rem;
+}
+.creating_order .order_user-info h3 {
+  height: 5%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.creating_order .order_user-info form {
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+  justify-content: space-between;
+}
+.creating_order .order_user-info form span,
+.creating_order .order_user-info form label,
+.creating_order .order_user-info form button {
+  margin: 0 auto;
+}
+.creating_order .order_user-info form span,
+.creating_order .order_user-info form button {
+  padding: 1rem 1rem;
+  border: 1px solid black;
+  width: 15vw;
+}
+.creating_order .order_user-info form span input,
+.creating_order .order_user-info form button input {
+  border: none;
+  width: 100%;
+}
+.creating_order .order_user-info form label input {
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+.creating_order .order_user-info form .register_form-input_wrapper {
+  border: 0.125rem solid gray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 15rem;
+}
+.creating_order .order_user-info form .register_form-input_wrapper input {
+  padding: 1rem;
+  font-size: 1rem;
+  border: none;
+  width: 100%;
+}
+.creating_order .order_user-info form .register_form-input_wrapper input:focus-visible {
+  outline: none;
+}
+.creating_order .order_user-info form .register_form-input_wrapper input:invalid[data-focused=true] ~ .error {
+  display: block;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .error {
+  position: relative;
+  display: none;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .error svg {
+  width: 25px;
+  height: 25px;
+  fill: red;
+  position: relative;
+  z-index: 5;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .error span {
+  position: absolute;
+  top: -50%;
+  right: -8%;
+  height: 100%;
+  background-color: rgb(220, 100, 100);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.12rem;
+  font-size: 0.8rem;
+  width: 14rem;
+  padding: 0.9rem 0.7rem;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .PhoneInput {
+  flex-direction: row-reverse;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .PhoneInput input {
+  border: none;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .PhoneInput input:focus-visible {
+  outline: none;
+}
+.creating_order .order_user-info form .register_form-input_wrapper .errorPhone .error {
+  display: block;
+}
+
+.loading {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }/*# sourceMappingURL=main.css.map */

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { FilterQuery, ObjectId } from 'mongoose';
+import { ObjectId } from 'mongoose';
 
 import { ProductInterface } from './interfaces/products.interface';
-import { CreateProductDTO } from './dto/products.dto';
+import { CreateProductDTO, UpdateProductDTO } from './dto/products.dto';
 import { ProductsRepository } from './products.repository';
-import { async } from 'rxjs';
 
 @Injectable()
 export class ProductsService {
@@ -56,6 +55,32 @@ export class ProductsService {
     }
   };
 
+  getProductStock = async (id: ObjectId): Promise<ProductInterface> => {
+    try {
+      const product = await this.productRepository.findById(id, {
+        name: 0,
+        description: 0,
+        imageURL: 0,
+        price: 0,
+        category: 0,
+        subcategory: 0,
+        _id: 0,
+      });
+      return product;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  restProductStock = async (_id: ObjectId, quantity: number) => {
+    try {
+      const { stock } = await this.getProductStock(_id);
+      await this.updateProduct(_id, { stock: stock - quantity });
+    } catch (error) {
+      return error;
+    }
+  };
+
   createProduct = async (
     createProductDTO: CreateProductDTO,
   ): Promise<ProductInterface> => {
@@ -69,12 +94,12 @@ export class ProductsService {
 
   updateProduct = async (
     id: ObjectId,
-    createProductDTO: CreateProductDTO,
+    updateProductDTO: UpdateProductDTO,
   ): Promise<ProductInterface> => {
     try {
       const updatedProduct = this.productRepository.updateObject(
         id,
-        createProductDTO,
+        updateProductDTO,
       );
       return updatedProduct;
     } catch (error) {

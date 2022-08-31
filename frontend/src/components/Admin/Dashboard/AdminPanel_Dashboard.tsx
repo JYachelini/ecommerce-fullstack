@@ -1,5 +1,9 @@
+import { useContext } from 'react';
+import { Context } from '../../Context/Context';
+
 function AdminPanel_Dashboard() {
-  return <div>dashboard</div>;
+  const { user } = useContext(Context);
+  return <div>Hola {user?.name}</div>;
 }
 
 export default AdminPanel_Dashboard;

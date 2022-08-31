@@ -11,31 +11,39 @@ import {
   UnauthorizedException,
   HttpStatus,
   Query,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
-import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
+import {
+  LocalAuthGuard,
+  JwtAuthGuard,
+  RolesGuard,
+  UserIsUserGuard,
+  JwtRefreshAuthGuard,
+} from '../auth/guards';
 import { CreateUserDTO } from './dto/user.dto';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User, UserRole } from './interfaces/user.interface';
 import { ObjectId } from 'mongoose';
-import { UserIsUserGuard } from '../auth/guards/UserIsUser.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { hasRoles } from '../auth/decorator/roles.decorator';
+import { GetCurrentUser, hasRoles } from '../auth/decorator';
+import { Response } from 'express';
+import { CartService } from 'src/cart/cart.service';
 
 @Controller('')
 export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    @Inject(forwardRef(() => CartService)) private cartService: CartService,
   ) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Req() req, @Res() res) {
-    const access_token = await this.authService.login(req.user);
-    if (access_token.error) res.status(HttpStatus.NOT_FOUND).json(access_token);
-    else res.status(HttpStatus.OK).json(access_token);
+    const tokens = await this.authService.login(req.user);
+    if (tokens.error) res.status(HttpStatus.NOT_FOUND).json(tokens);
+    else res.status(HttpStatus.OK).json(tokens);
   }
 
   @Post('register')
@@ -48,13 +56,20 @@ export class UsersController {
     }
   }
 
-  @Get('user')
-  user(@Req() req, @Res() res) {
-    if (req.user) {
-      res.status(HttpStatus.OK).json(req.user);
-    } else {
-      res.status(HttpStatus.NOT_FOUND).json({ error: 'No user found' });
-    }
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  async logout(@GetCurrentUser('_id') _id: ObjectId, @Res() res: Response) {
+    const logout = await this.authService.logout(_id);
+    res.status(HttpStatus.OK).json(logout);
+  }
+
+  @UseGuards(JwtRefreshAuthGuard)
+  @Post('refresh')
+  async refreshToken(
+    @GetCurrentUser('_id') _id: ObjectId,
+    @GetCurrentUser('refresh_token') refresh_token: string,
+  ) {
+    return this.authService.refreshTokens(_id, refresh_token);
   }
 
   @hasRoles(UserRole.ADMIN)
@@ -62,11 +77,15 @@ export class UsersController {
   @Get('users')
   async users(
     @Res() res,
+    @Query('userId') _id: ObjectId,
     @Query('sort') sort: string,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
     let filters = {};
+    if (_id) {
+      filters = { _id };
+    }
     let sorting = {};
     const actual_page: number = Number(page) || 1;
     const limits = Number(limit) || 10;
@@ -101,6 +120,9 @@ export class UsersController {
 
     if (user._id)
       throw new UnauthorizedException('You cannot update your own id.');
+
+    if (user.username)
+      throw new UnauthorizedException('You cannot update your own username.');
 
     const userUpdated = await this.usersService.updateUser(id, user);
     res

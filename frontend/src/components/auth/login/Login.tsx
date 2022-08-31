@@ -1,11 +1,12 @@
-import axios from 'axios';
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Context } from '../../Context/Context';
+import { useAxios } from '../../CustomHooks/useAxios';
 import {
   axiosResponseLoginError,
   axiosResponseLoginSuccess,
 } from '../../Interfaces/axiosResponse.interface';
+import Loading from '../../Loading/Loading';
 import LoginInputs from './LoginInputs';
 
 interface LoginValues {
@@ -17,12 +18,15 @@ const INITIAL_STATE_LOGIN: LoginValues = {
   password: '',
 };
 
-function login() {
+function Login() {
+  const { setAccessToken, setRefreshToken, loading, setLoading } =
+    useContext(Context);
+  const api = useAxios();
   const navigate = useNavigate();
-  const { setAccessToken } = useContext(Context);
 
   const [loginValues, setLoginValues] =
     useState<LoginValues>(INITIAL_STATE_LOGIN);
+  const [errorLogin, setErrorLogin] = useState<string | null>(null);
 
   const handleChangeLoginValues = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -46,23 +50,26 @@ function login() {
     },
   ];
 
-  const [errorLogin, setErrorLogin] = useState<string | null>(null);
-
   const login = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post('http://localhost:8080/login', loginValues, {
-        withCredentials: true,
-      })
+    setLoading(true);
+    api
+      .post('http://localhost:8080/login', loginValues)
       .then(({ data }: axiosResponseLoginSuccess) => {
         if (data.access_token) {
           setAccessToken(data.access_token);
-          navigate('/');
+          setRefreshToken(data.refresh_token);
+          setTimeout(() => {
+            setLoading(false);
+            navigate('/');
+          }, 1000);
         } else {
-          setErrorLogin('Error inesperado');
+          setLoading(false);
+          setErrorLogin('Error inesperado.');
         }
       })
       .catch(({ response }: axiosResponseLoginError) => {
+        setLoading(false);
         if (response.data.error === 'User not found.') {
           setErrorLogin('Usuario no encontrado.');
         } else if (response.data.error === 'Wrong password.') {
@@ -76,7 +83,11 @@ function login() {
   return (
     <div className="login">
       <h2>Ingresar</h2>
-      {errorLogin ? <span>{errorLogin}</span> : null}
+      {loading ? (
+        <Loading />
+      ) : (
+        <>{errorLogin ? <span>{errorLogin}</span> : null}</>
+      )}
       <form className="login-form" onSubmit={login}>
         {inputs.map((input) => {
           return (
@@ -97,4 +108,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;

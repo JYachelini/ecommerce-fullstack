@@ -13,7 +13,7 @@ export class User {
   username: string;
 
   @Prop({ default: 'user' })
-  roles: UserRole;
+  roles: UserRole[];
 
   @Prop({ required: true, unique: true })
   email: string;
@@ -26,6 +26,9 @@ export class User {
 
   @Prop()
   address: string;
+
+  @Prop()
+  hashRT: string | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -9,7 +9,7 @@ function AdminPanel_Products() {
 
   return (
     <>
-      <ProductList canEdit={true} />
+      <ProductList hasPermissions={true} />
     </>
   );
 }

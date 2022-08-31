@@ -1,13 +1,14 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Context } from '../Context/Context';
 import { ProductInterface } from '../Interfaces/products.interface';
+import Loading from '../Loading/Loading';
 import Product from '../Product/Product';
 
 interface PropsProductList {
-  canEdit?: boolean;
+  hasPermissions?: boolean;
 }
 
-function ProductList({ canEdit = false }: PropsProductList) {
+function ProductList({ hasPermissions = false }: PropsProductList) {
   const {
     products,
     actual_page,
@@ -16,39 +17,74 @@ function ProductList({ canEdit = false }: PropsProductList) {
     setLimit,
     last_page,
     total_items,
+    loading,
+    setLoading,
+    setProductId,
   } = useContext(Context);
 
-  const prevPage = async () => {
+  const firstPage = () => {
+    setActualPage(1);
+  };
+
+  const lastPage = () => {
+    setActualPage(last_page);
+  };
+
+  const prevPage = () => {
     if (actual_page === 1) return;
     else setActualPage(actual_page - 1);
   };
 
-  const nextPage = async () => {
+  const nextPage = () => {
     if (actual_page === last_page) return;
     setActualPage(actual_page + 1);
+  };
+
+  useEffect(() => {
+    if (products) setLoading(false);
+  }, []);
+
+  const handleProductId = (e: any) => {
+    const { value } = e.target;
+    setProductId(value);
   };
 
   return (
     <>
       {products ? (
         <>
-          <div className="products_list">
-            {products.map((product: ProductInterface) => {
-              return (
-                <Product {...product} key={product._id} canEdit={canEdit} />
-              );
-            })}
-          </div>
+          {loading ? (
+            <Loading />
+          ) : (
+            <div className="products_list">
+              {products.map((product: ProductInterface) => {
+                return (
+                  <Product
+                    product={product}
+                    key={product._id}
+                    hasPermissions={hasPermissions}
+                  />
+                );
+              })}
+            </div>
+          )}
+
           <div className="products_pages">
             <div className="product_pages-btn_wrapper">
+              <button className="product_pages-btn first" onClick={firstPage}>
+                {`<<`}
+              </button>
               <button className="product_pages-btn prev" onClick={prevPage}>
-                Prev
+                {`<`}
               </button>
               <button
                 className="product_pages-btn next_page"
                 onClick={nextPage}
               >
-                Next
+                {`>`}
+              </button>
+              <button className="product_pages-btn last" onClick={lastPage}>
+                {`>>`}
               </button>
             </div>
             <span>
@@ -56,9 +92,18 @@ function ProductList({ canEdit = false }: PropsProductList) {
             </span>
             <span>Total items {total_items}</span>
           </div>
+          {hasPermissions ? (
+            <>
+              <input
+                type="text"
+                placeholder="Buscar por ID de producto"
+                onChange={handleProductId}
+              />
+            </>
+          ) : null}
         </>
       ) : (
-        <p>Esperando productos</p>
+        <p>No hay productos</p>
       )}
     </>
   );

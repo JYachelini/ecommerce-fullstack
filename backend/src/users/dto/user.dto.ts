@@ -46,4 +46,8 @@ export class CreateUserDTO {
   @MinLength(3)
   @IsOptional()
   address: string;
+
+  @IsString()
+  @IsOptional()
+  hashRT: string;
 }

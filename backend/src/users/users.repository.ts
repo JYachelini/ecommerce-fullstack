@@ -1,15 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { EntityRepository } from 'src/db/entity.repository';
 import { CreateUserDTO } from './dto/user.dto';
 import { User } from './interfaces/user.interface';
 import { UserDocument } from './schemas/user.schema';
-import * as bcrypt from 'bcrypt';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersRepository extends EntityRepository<UserDocument> {
-  constructor(@InjectModel('User') userModel: Model<User>) {
+  constructor(
+    @InjectModel('User') userModel: Model<User>,
+    @Inject(forwardRef(() => AuthService)) private authService: AuthService,
+  ) {
     super(userModel);
   }
 
@@ -42,7 +45,7 @@ export class UsersRepository extends EntityRepository<UserDocument> {
       if (userFound) {
         return { error: 'User already exist.' };
       } else {
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await this.authService.hashData(password);
         const newUserRegistered = await this.createEntity({
           name,
           username,
@@ -51,10 +54,29 @@ export class UsersRepository extends EntityRepository<UserDocument> {
           phone,
           address,
         });
+        const tokens = await this.authService.getTokens({
+          _id: newUserRegistered._id,
+          name,
+          username,
+          email,
+          phone,
+          address,
+          roles: newUserRegistered.roles,
+        });
+        await this.updateRefreshTokenHash(
+          newUserRegistered._id,
+          tokens.refresh_token,
+        );
         return {
           _id: newUserRegistered._id,
+          tokens,
         };
       }
     }
+  };
+
+  updateRefreshTokenHash = async (_id: ObjectId, refresh_token: string) => {
+    const refresh_tokenHashed = await this.authService.hashData(refresh_token);
+    await this.updateObject(_id, { hashRT: refresh_tokenHashed });
   };
 }

@@ -7,44 +7,54 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { Context } from './components/Context/Context';
 import Profile from './components/Profile/Profile';
-import { useJwt } from 'react-jwt';
-import { DecodedToken } from './components/Interfaces/token.interface';
 import NavbarAdmin from './components/NavbarAdmin/NavbarAdmin';
 import AdminPanel from './components/Admin/AdminPanel';
+import ProductById from './components/Product/ProductById';
+import Cart from './components/Cart/Cart';
+import Order from './components/Order/Order';
+import ProfileOrders from './components/Profile/ProfileOrders';
 
 function App() {
-  const { access_token, setLimit } = useContext(Context);
-  const { decodedToken } = useJwt<DecodedToken>(access_token);
-  let user = decodedToken?.user;
-
+  const { setLimit, productsCart, user } = useContext(Context);
+  const location = useLocation();
   useEffect(() => {
     setLimit(10);
-  }, []);
-  const location = useLocation();
+  }, [location.pathname]);
 
-  if (user?.role === 'admin' && location.pathname.includes('adminDashboard')) {
+  if (
+    user?.role.includes('admin') &&
+    location.pathname.includes('adminDashboard')
+  ) {
     return <AdminPanel />;
   } else {
     return (
       <div className="App">
-        <div className="navbar_wrapper">
-          {user?.role === 'admin' ? <NavbarAdmin /> : null}
+        <header className="navbar_wrapper">
+          {user?.role.includes('admin') ? <NavbarAdmin /> : null}
 
           <Navbar />
-        </div>
+        </header>
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductById />} />
+            <Route path="/cart" element={<Cart />} />
+            {productsCart.size > 0 ? (
+              <>
+                <Route path="/cart/order" element={<Order />} />
+              </>
+            ) : null}
             {user ? (
               <>
-                {user.role === 'admin' ? (
+                {user.role.includes('admin') ? (
                   <>
                     <Route path="/adminDashboard" element={<AdminPanel />} />
                   </>
                 ) : (
                   <></>
                 )}
-                <Route path="/profile" element={<Profile user={user} />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/myorders" element={<ProfileOrders />} />
               </>
             ) : (
               <>

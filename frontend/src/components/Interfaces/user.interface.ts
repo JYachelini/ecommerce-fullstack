@@ -16,3 +16,8 @@ export interface UserInterface {
   phone: string;
   address?: string;
 }
+
+export interface LoginValues {
+  username: string;
+  password: string;
+}
