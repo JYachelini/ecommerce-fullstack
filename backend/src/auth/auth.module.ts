@@ -1,4 +1,4 @@
-import { forwardRef, Global, Inject, Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/users/users.module';
@@ -13,15 +13,6 @@ import { RolesGuard } from './guards/';
   imports: [
     forwardRef(() => UsersModule),
     PassportModule,
-    // JwtModule.registerAsync({
-    //   inject: [config.KEY],
-    //   useFactory: (configService: ConfigType<typeof config>) => {
-    //     return {
-    //       secret: configService.JWT_SECRET,
-    //       signOptions: { expiresIn: '1h' },
-    //     };
-    //   },
-    // }),
     JwtModule.register({}),
   ],
   providers: [

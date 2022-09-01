@@ -33,14 +33,14 @@ export class CartService {
   createOrder = async (cart: CreateCartDTO, user: UserInterface) => {
     const productsInCart = new Set(cart.products);
 
-    const checkStock = await this.checkStock(productsInCart);
+    const checkStock = await this.checkStock(productsInCart); // Check if products in cart has stock available
 
     if (checkStock.length > 0) {
       return { errors: checkStock };
     } else {
       const cartCreated = await this.cartRepository.createEntity(cart);
       await this.removeStock(productsInCart);
-      const mailSent = await this.mailService.orderConfirmed(cartCreated, user);
+      const mailSent = await this.mailService.orderConfirmed(cartCreated, user); // Send email
       await this.usersService.updateUser(user._id, {
         address: cart.userAddress,
         phone: cart.userPhone,

@@ -23,3 +23,5 @@ seeder({
     MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
   ],
 }).run([ProductSeeder]);
+
+// This module is used to fill the database with fake products.

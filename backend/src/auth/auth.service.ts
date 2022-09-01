@@ -24,6 +24,7 @@ export class AuthService {
   ) {}
 
   validateUser = async (username: string, password: string) => {
+    // Validate user for login
     const user = await this.usersService.findUser(username);
 
     if (!user) return { error: 'User not found.' };

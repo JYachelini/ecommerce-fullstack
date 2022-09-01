@@ -17,7 +17,6 @@ interface filteredCategories {
 
 @Injectable()
 export class ProductsRepository extends EntityRepository<ProductDocument> {
-  // Injecto el modelo del producto
   constructor(
     @InjectModel(Product.name) productModel: Model<ProductInterface>,
   ) {
@@ -25,6 +24,7 @@ export class ProductsRepository extends EntityRepository<ProductDocument> {
   }
 
   getCategories = async (Filter: FilterQuery<ProductDocument>) => {
+    // Filter of categorys and save objects with category and their subcategories, all in one.
     try {
       const categories = await this.entityModel
         .find(Filter, {
@@ -41,19 +41,22 @@ export class ProductsRepository extends EntityRepository<ProductDocument> {
 
             const categoryFound = filteredCategories.findIndex(
               (c) => c.category === categoryToPush,
-            );
+            ); // Return the index of category existent on filteredCategories
 
             if (categoryFound >= 0) {
+              // If category is found on filteredCategories
               if (
                 !filteredCategories[categoryFound].subcategories.includes(
                   subcategoryToPush,
                 )
               ) {
+                // If subcategory of category found in filteredCategories doesen't exist
                 filteredCategories[categoryFound].subcategories.push(
                   subcategoryToPush,
                 );
               }
             } else {
+              // If filteredCategories not have the current category, it will push
               filteredCategories.push({
                 category: categoryToPush,
                 subcategories: [subcategoryToPush],
