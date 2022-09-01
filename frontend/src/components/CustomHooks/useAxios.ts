@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { Context } from '../Context/Context';
 import { UserDecoded } from '../Interfaces/token.interface';
 
-const baseURL = 'http://localhost:8080';
+const baseURL = 'https://ecommerce-fullstack-yache.herokuapp.com';
 
 export const useAxios = () => {
   const {
