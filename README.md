@@ -87,6 +87,7 @@ Ejecutar el frontend
 - Mejor diseño para UX
 - Metodos de pago incluidos como MP.
 - Agregar modales, por ejemplo para el login y register.
+- Agregar todo referido a test
 
 ## Bugs para arreglar
 
