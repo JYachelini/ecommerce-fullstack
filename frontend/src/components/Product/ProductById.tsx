@@ -42,7 +42,7 @@ function ProductById() {
           >
             Agregar al carrito
           </button>
-          <button>Comprar</button>
+          {/* <button>Comprar</button> */}
         </div>
       </article>
     );
