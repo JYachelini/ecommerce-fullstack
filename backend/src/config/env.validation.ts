@@ -1,5 +1,11 @@
 import { plainToClass } from 'class-transformer';
-import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
 enum EnvironmentType {
   Dev = 'dev',
@@ -16,14 +22,32 @@ class EnvironmentVariables {
   @IsString()
   FRONTEND_PORT: string;
 
+  @IsNotEmpty()
   @IsString()
   MONGODB_URI: string;
 
+  @IsNotEmpty()
   @IsString()
   JWT_SECRET: string;
 
+  @IsNotEmpty()
   @IsString()
   JWT_REFRESH_SECRET: string;
+
+  @IsNotEmpty()
+  @IsString()
+  MAIL_HOST: string;
+
+  @IsNotEmpty()
+  MAIL_PORT: number | string;
+
+  @IsNotEmpty()
+  @IsString()
+  ADMIN_MAIL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  ADMIN_MAIL_PASSWORD: string;
 }
 
 export function validate(configuration: Record<string, unknown>) {
@@ -39,3 +63,5 @@ export function validate(configuration: Record<string, unknown>) {
 
   return finalConfig;
 }
+
+// This validate the .env file

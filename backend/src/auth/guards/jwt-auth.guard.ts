@@ -20,15 +20,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return user;
   }
 
-  canActivate(context: ExecutionContext) {
-    const isPublic: boolean = this.reflector.getAllAndOverride('isPublic', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
-      return true;
-    }
+  // canActivate(context: ExecutionContext) { Not used, is for give access free for routes with @isPublic() decorator.
+  //   const isPublic: boolean = this.reflector.getAllAndOverride('isPublic', [
+  //     context.getHandler(),
+  //     context.getClass(),
+  //   ]);
+  //   if (isPublic) {
+  //     return true;
+  //   }
 
-    return super.canActivate(context);
-  }
+  //   return super.canActivate(context);
+  // }
 }

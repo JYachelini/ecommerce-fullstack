@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const role = this.reflector.get<UserRole>('roles', context.getHandler());
-
+    // Role can be 'user' or 'admin', it specified on @hasRole() decorator
     if (!role) return true;
 
     const request = context.switchToHttp().getRequest();

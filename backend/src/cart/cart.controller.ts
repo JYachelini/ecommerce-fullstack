@@ -47,7 +47,7 @@ export class CartController {
   @hasRoles(UserRole.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/')
-  async getCarts(
+  async getOrders(
     @Res() res,
     @Query('page') page: number,
     @Query('limit') limit: number,

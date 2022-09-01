@@ -15,6 +15,7 @@ export class UserIsUserGuard implements CanActivate {
     const user = request.user;
 
     return this.userService.findUserById(user._id).then((user: User) => {
+      // Check if the person who made the request is who he/she claims to be
       let hasPermission = false;
 
       if (user.id === params.id) {
