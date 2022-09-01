@@ -19,34 +19,43 @@ export default function ContextProvider({ children }: any) {
   // Cart
   const [cart, setCart] = useLocalStorage('cart', INITIAL_STATE_CART);
 
-  const productsCart: Set<ProductInterface> = new Set(cart.products);
+  const productsCart: Map<string, ProductInterface> = new Map(cart.products);
 
   useEffect(() => {
     let cartPrice = 0;
+    let quantity = 0;
     productsCart.forEach((product) => {
+      quantity = quantity + product.quantity!;
       const productTotalPrice = product.quantity! * product.price!;
       cartPrice += productTotalPrice;
     });
-    setCart({ ...cart, totalPrice: cartPrice });
+    setCart({ ...cart, totalPrice: cartPrice, totalQuantity: quantity });
   }, [cart.products]);
 
   const addProduct = (product: ProductInterface) => {
     product.quantity = 1;
     delete product.stock;
-    if (productsCart.has(product)) {
-      const values = productsCart.values();
-      const temp = [...values].find((el) => el._id == product._id);
-      temp!.quantity! += 1;
-      productsCart.delete(product);
-      productsCart.add(temp!);
+    if (productsCart.has(product._id!)) {
+      const tempQuantity = productsCart.get(product._id!)?.quantity;
+      productsCart.set(product._id!, {
+        ...product,
+        quantity: tempQuantity! + 1,
+      });
+      setCart({ products: [...productsCart] });
     } else {
-      productsCart.add(product);
+      productsCart.set(product._id!, { ...product });
+      setCart({ products: [...productsCart] });
     }
-    const quantityCart = cart.totalQuantity;
-    setCart({
-      products: [...productsCart],
-      totalQuantity: quantityCart + 1,
-    });
+  };
+
+  const removeProduct = (product: ProductInterface) => {
+    productsCart.delete(product._id!);
+    setCart({ products: [...productsCart] });
+  };
+
+  const clearCart = () => {
+    productsCart.clear();
+    setCart({ products: [...productsCart] });
   };
 
   // Products
@@ -96,6 +105,8 @@ export default function ContextProvider({ children }: any) {
         productName,
         setProductName,
         addProduct,
+        removeProduct,
+        clearCart,
         products,
         setProducts,
         actual_page,

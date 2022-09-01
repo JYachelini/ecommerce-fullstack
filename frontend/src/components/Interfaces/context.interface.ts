@@ -7,8 +7,10 @@ export interface context {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   cart: CartInterface;
   setCart: any;
-  productsCart: Set<ProductInterface>;
+  productsCart: Map<string, ProductInterface>;
   addProduct: (product: ProductInterface) => void;
+  removeProduct: (product: ProductInterface) => void;
+  clearCart: () => void;
 
   products: ProductInterface[];
   setProducts: React.Dispatch<React.SetStateAction<ProductInterface[]>>;

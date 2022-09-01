@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Context } from '../Context/Context';
+import ProductInCart from './ProductInCart';
 
 function Cart({
   btnContinue = true,
@@ -8,45 +9,32 @@ function Cart({
   totalEachShow = true,
   valueUnitShow = true,
 }) {
-  const { cart, productsCart, access_token } = useContext(Context);
+  const { cart, productsCart, access_token, clearCart } = useContext(Context);
   return (
     <div className="cart_view">
       {productsCart.size > 0 ? (
         <>
           <div className="cart_items">
-            {[...productsCart].map((product) => {
+            {Array.from(productsCart.values()).map((product) => {
               return (
-                <Link to={`/product/${product._id}`} key={product._id}>
-                  <article id={product._id}>
-                    {imgShow ? (
-                      <div className="cart_items-image_wrapper">
-                        <img src={product.imageURL} alt={product.name} />
-                      </div>
-                    ) : null}
-
-                    <div className="cart_items-info">
-                      <div>
-                        <h3>
-                          <span>{product.quantity}</span> {product.name}
-                        </h3>
-                        {valueUnitShow ? (
-                          <span>Unidad: ${product.price}</span>
-                        ) : null}
-                      </div>
-                      {totalEachShow ? (
-                        <h4>Total: ${product.price! * product.quantity!}</h4>
-                      ) : null}
-                    </div>
-                  </article>
-                </Link>
+                <ProductInCart
+                  key={product._id}
+                  product={product}
+                  imgShow={imgShow}
+                  totalEachShow={totalEachShow}
+                  valueUnitShow={valueUnitShow}
+                />
               );
             })}
           </div>
           <div className="cart_info">
             {btnContinue ? (
-              <Link to={`${access_token ? '/cart/order' : '/register'}`}>
-                Continuar con el pedido
-              </Link>
+              <>
+                <Link to={`${access_token ? '/cart/order' : '/register'}`}>
+                  Continuar con el pedido
+                </Link>
+                <button onClick={clearCart}>Limpiar carrito</button>
+              </>
             ) : null}
             <span>
               Total: <strong>${cart.totalPrice}</strong>
