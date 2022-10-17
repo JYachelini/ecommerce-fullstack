@@ -8,7 +8,6 @@ import {
 import { categories, ProductInterface } from '../Interfaces/products.interface';
 import { UserDecoded } from '../Interfaces/token.interface';
 import jwt_decode from 'jwt-decode';
-import { useLocation } from 'react-router-dom';
 
 function FetchFunctions({ children }: any) {
   const {

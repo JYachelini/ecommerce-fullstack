@@ -1,0 +1,10 @@
+.chat {
+  margin: 0 10rem;
+  background-color: red;
+  .chat-message {
+    display: flex;
+    flex-direction: column;
+    .chat-message_author {
+    }
+  }
+}

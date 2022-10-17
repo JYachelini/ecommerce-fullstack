@@ -1,0 +1,12 @@
+.chat {
+  margin: 0 10rem;
+  .chat-message {
+    display: flex;
+    flex-direction: column;
+    background-color: red;
+    overflow: auto;
+    margin: 0 1rem;
+    .chat-message_author {
+    }
+  }
+}

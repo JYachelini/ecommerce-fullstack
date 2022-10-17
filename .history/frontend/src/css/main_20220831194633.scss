@@ -1,0 +1,27 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.App {
+  min-height: 100vh;
+}
+input:focus-visible {
+  outline: none;
+}
+
+@import '../components/Home/home';
+@import '../components/ProductsList/productList';
+@import '../components/Product/product';
+@import '../components/Navbar/navbar';
+@import '../components/NavbarAdmin/navbarAdmin';
+@import '../components/auth/login/login';
+@import '../components/auth/register/register';
+@import '../components/Profile/profile';
+@import '../components/Admin/adminDashboard';
+@import '../components/Cart/cart';
+@import '../components/Order/order';
+@import '../components/Loading/loading';

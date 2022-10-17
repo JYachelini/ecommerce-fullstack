@@ -1,0 +1,16 @@
+.chat {
+  margin: 0 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  .chat-message {
+    display: flex;
+    flex-direction: column;
+    background-color: red;
+    overflow: auto;
+    gap: 0.5rem;
+    width: fit-content;
+    .chat-message_author {
+    }
+  }
+}
