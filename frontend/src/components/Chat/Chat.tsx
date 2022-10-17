@@ -21,7 +21,9 @@ function Chat() {
   };
 
   useEffect(() => {
-    const newSocket = io('http://localhost:8001');
+    const newSocket = io(
+      'https://ecommerce-fullstack-yache.herokuapp.com:8001',
+    );
     setSocket(newSocket);
   }, [setSocket]);
 

@@ -5,3 +5,5 @@ dist
 backend/src/products/seeder.ts
 
 frontend/src/css/**.css.map
+
+.history
